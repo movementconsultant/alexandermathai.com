@@ -37,7 +37,7 @@ Status as of the initial placeholder build (branch
 | Build | `npm run build` (includes `postbuild` guard) | Success — 2 pages built, postbuild guard: 0 violations |
 | Unit tests | `npm test` | 12/12 passed |
 | Accessibility | `npm run test:a11y` | `/` and `/404`: 0 axe-core violations each |
-| Forbidden-string sweep | `grep -ril lexmathai . --exclude-dir=.git` | 0 hits (exit code 1 / no match), confirmed across the whole working tree including `node_modules` and `dist` |
+| Forbidden-string sweep | Case-insensitive, whole-tree search (excluding `.git/`) for the superseded working name from `CLAUDE.md` rule 1 | 0 hits, confirmed across the whole working tree including `node_modules` and `dist` |
 
 ## Not done (by design — see docs/LAUNCH_BLOCKERS.md)
 
@@ -50,8 +50,9 @@ Status as of the initial placeholder build (branch
 ## Hosted preview review — 2026-08-15
 
 - Local verification passed (typecheck, production build + public-output
-  guard, unit tests, axe-core accessibility scan, and the LexMathAI
-  reference sweep — see "Checks run and results" above).
+  guard, unit tests, axe-core accessibility scan, and the superseded
+  working-name sweep described in `CLAUDE.md` rule 1 — see "Checks run and
+  results" above).
 - The Cloudflare branch preview (`claude/alexander-mathai-placeholder`,
   configured as a preview deployment, `main` remains the production branch)
   was manually reviewed by the owner and found acceptable for this stage.
