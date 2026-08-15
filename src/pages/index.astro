@@ -1,0 +1,83 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { AREAS_OF_WORK, TMI } from "../config/site";
+---
+
+<BaseLayout path="/">
+  <section class="section section--hero">
+    <div class="wrap">
+      <span class="eyebrow">Founder</span>
+      <h1 class="hero__headline">
+        Alexander Mathai builds high-performance digital ecosystems where
+        brand, technology, AI, media, commerce, and disciplined execution
+        become durable businesses.
+      </h1>
+    </div>
+  </section>
+
+  <section id="work" class="section" aria-labelledby="work-heading">
+    <div class="wrap">
+      <h2 id="work-heading" class="section__title">Areas of work</h2>
+      <p class="section__lede">
+        The disciplines that show up across everything built here.
+      </p>
+      <ul class="area-grid">
+        {
+          AREAS_OF_WORK.map((area) => (
+            <li class="area-card">
+              <h3>{area.title}</h3>
+              <p>{area.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section id="status" class="section" aria-labelledby="status-heading">
+    <div class="wrap">
+      <h2 id="status-heading" class="section__title">Where this site is</h2>
+      <div class="wip-panel">
+        <p>
+          This is a deliberate first step, not an unfinished one. The full
+          site is in active development, and each part of it — the writing,
+          the work shown, the way it's built — is going up only once it's
+          ready to represent the standard behind it.
+        </p>
+        <p>
+          What's here now is real: a founder identity, a clear point of
+          view, and a foundation built to the same production bar as
+          everything else in this ecosystem.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="texas-movement" class="section" aria-labelledby="tmi-heading">
+    <div class="wrap">
+      <h2 id="tmi-heading" class="section__title">
+        Relationship to Texas Movement International
+      </h2>
+      <div class="tmi-panel">
+        <p>
+          Alexander Mathai is the founder voice behind {TMI.name}, providing
+          the strategic and creative direction that runs across its work.
+          Learn more at <a href={TMI.url} rel="noopener">texasmovement.com</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="follow" class="section" aria-labelledby="follow-heading">
+    <div class="wrap">
+      <h2 id="follow-heading" class="section__title">Follow the build</h2>
+      <p class="section__lede">
+        A way to follow along is coming. Nothing to sign up for yet.
+      </p>
+      <span class="cta-badge" role="status">
+        <span class="cta-badge__dot" aria-hidden="true"></span>
+        Follow the build — coming soon
+      </span>
+    </div>
+  </section>
+</BaseLayout>
