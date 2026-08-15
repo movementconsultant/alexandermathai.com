@@ -47,6 +47,24 @@ Status as of the initial placeholder build (branch
 - No deploy has been triggered.
 - No pages beyond `/` and `/404` — this is a placeholder, not the full site.
 
+## Hosted preview review — 2026-08-15
+
+- Local verification passed (typecheck, production build + public-output
+  guard, unit tests, axe-core accessibility scan, and the LexMathAI
+  reference sweep — see "Checks run and results" above).
+- The Cloudflare branch preview (`claude/alexander-mathai-placeholder`,
+  configured as a preview deployment, `main` remains the production branch)
+  was manually reviewed by the owner and found acceptable for this stage.
+- Agent-side hosted verification of the live preview URL is unavailable in
+  this environment: outbound access to `pages.dev` is blocked by the
+  session's network egress policy (`EGRESS_BLOCKED`). All verification
+  above this section is source-level/local only.
+- The placeholder remains `noindex` (`PUBLIC_PREVIEW` default-on) and is
+  **not approved for production-domain launch**.
+- Remaining launch blockers before production: a verified newsletter/CTA
+  destination, verified social URLs, production-domain/DNS approval, and
+  final owner approval to merge.
+
 ## Open questions / nothing currently blocking a draft PR
 
 None. Everything ambiguous enough to guess wrong on (CTA behavior, TMI
