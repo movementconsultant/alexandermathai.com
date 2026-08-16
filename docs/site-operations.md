@@ -137,6 +137,41 @@ build pass; fix the underlying content or, for a deliberate and reviewed change 
 connecting a verified contact backend), update the guard in the same commit that makes the change
 it now needs to allow.
 
+The guard also prints a **non-blocking claims-registry audit** after the hard checks pass — see
+`docs/claims-governance.md` for what it checks and why it can never fail the build.
+
+## E2E regression tests
+
+`tests/e2e/preview.spec.ts` and `tests/e2e/production.spec.ts` (Playwright) test the **built**
+site — not the dev server — by serving `dist/` through `scripts/static-server.mjs` and driving a
+real browser against it. They cover: every route is reachable; preview builds are `noindex,nofollow`
+everywhere with no sitemap; production builds are indexable with a correct canonical/robots.txt/
+sitemap; no route ever exposes a `mailto:`, live social link, or external form/fetch target; and
+`/contact` stays inert under a real valid-input submission attempt (no navigation, no network
+request, no implied-success message).
+
+Run:
+
+```bash
+npm run test:e2e:preview       # builds in preview mode, then runs preview.spec.ts
+npm run test:e2e:production    # builds with PUBLIC_PREVIEW=false, then runs production.spec.ts
+```
+
+**Prerequisites:** `@playwright/test` is a devDependency (already installed via `npm install`). A
+Chromium browser must be available:
+
+- **Normal environment**: run `npx playwright install chromium` once. No further configuration
+  needed — the default config resolves the installed browser automatically.
+- **This sandboxed build environment specifically**: `npx playwright install` cannot reach the
+  network here. A matching Chromium build is pre-installed at a fixed path instead — set
+  `PLAYWRIGHT_CHROMIUM_PATH=/opt/pw-browsers/chromium` before running either command. This is a
+  sandbox-only requirement; `playwright.config.ts` only applies the override when that env var is
+  actually set, so it has no effect anywhere else.
+
+Both suites were run end-to-end in this environment as part of adding them: 38/38 passed in
+preview mode, 22/22 passed in production mode (60/60 total), against real builds via the commands
+above.
+
 ## Content governance rules (carried forward from the rebuild brief)
 
 - Never fabricate biography, client history, results, press, product inventory, media metrics,

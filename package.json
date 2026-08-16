@@ -9,6 +9,8 @@
     "build": "astro check && astro build",
     "postbuild": "node scripts/postbuild-guard.mjs",
     "guard": "node scripts/postbuild-guard.mjs",
+    "test:e2e:preview": "npm run build && playwright test tests/e2e/preview.spec.ts",
+    "test:e2e:production": "PUBLIC_PREVIEW=false npm run build && playwright test tests/e2e/production.spec.ts",
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@playwright/test": "^1.62.1",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.3"

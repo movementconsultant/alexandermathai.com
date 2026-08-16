@@ -2,6 +2,11 @@
 dist/
 .astro/
 
+# E2E test artifacts (local/CI output only — see docs/site-operations.md
+# "E2E regression tests")
+test-results/
+playwright-report/
+
 # dependencies
 node_modules/
 
