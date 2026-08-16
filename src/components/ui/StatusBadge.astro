@@ -1,0 +1,20 @@
+---
+/**
+ * Status is always communicated as text, never by color alone (WCAG 1.4.1).
+ * `tone` only changes the dot/label color as a supplementary cue.
+ */
+interface Props {
+  label: string;
+  tone?: "active" | "progress" | "neutral";
+  class?: string;
+}
+
+const { label, tone = "neutral", class: className = "" } = Astro.props;
+const toneClass =
+  tone === "active" ? "status--active" : tone === "progress" ? "status--progress" : "";
+---
+
+<span class={`status ${toneClass} ${className}`} role="status">
+  <span class="status__dot" aria-hidden="true"></span>
+  {label}
+</span>

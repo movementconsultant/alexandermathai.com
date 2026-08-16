@@ -1,0 +1,63 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Button from "../components/ui/Button.astro";
+import { primaryNav } from "../data/nav";
+---
+
+<BaseLayout
+  title="Page not found — Alexander Mathai"
+  description="This page doesn't exist. Here's where to go instead."
+  noindex
+>
+  <section class="section not-found">
+    <div class="wrap not-found__inner">
+      <p class="eyebrow">404</p>
+      <h1>This route doesn't exist.</h1>
+      <p class="lede">
+        No dependency here — the page you're looking for either moved or was never built. Here's
+        where the rest of the system lives.
+      </p>
+      <div class="cluster not-found__ctas">
+        <Button href="/" variant="primary">Back to home</Button>
+        <Button href="/contact" variant="secondary">Contact</Button>
+      </div>
+      <nav aria-label="Site sections" class="not-found__nav">
+        <ul class="cluster">
+          {
+            primaryNav.map((item) => (
+              <li>
+                <a href={item.href} class="text-link">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .not-found__inner {
+    max-width: 34rem;
+  }
+
+  .not-found__ctas {
+    margin-block: var(--space-4) var(--space-5);
+  }
+
+  .not-found__nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+    border-top: var(--border-hairline);
+    padding-block-start: var(--space-3);
+  }
+</style>

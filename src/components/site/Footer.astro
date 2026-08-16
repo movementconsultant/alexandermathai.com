@@ -1,0 +1,148 @@
+---
+import { getCollection } from "astro:content";
+import { footerNav, footerLegal } from "../../data/nav";
+import { founderSocialLinks, tmiUrl } from "../../data/social";
+import { site } from "../../data/site";
+
+const divisions = (await getCollection("ecosystem")).sort((a, b) => a.data.order - b.data.order);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap site-footer__grid">
+    <div class="footer-col footer-col--identity">
+      <p class="brand-mark">{site.name}</p>
+      <p class="footer-relationship">
+        Founder &amp; President of{" "}
+        <a href={tmiUrl} class="text-link" target="_blank" rel="noopener noreferrer">
+          Texas Movement International
+        </a>
+        , the umbrella for the ecosystem below.
+      </p>
+      <p class="label-mono">{site.region}</p>
+    </div>
+
+    <nav class="footer-col" aria-label="Footer">
+      <p class="footer-col__title">Site</p>
+      <ul>
+        {
+          footerNav.map((item) => (
+            <li>
+              <a href={item.href} class="text-link">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <nav class="footer-col" aria-label="Ecosystem">
+      <p class="footer-col__title">Ecosystem</p>
+      <ul>
+        {
+          divisions.map((division) => (
+            <li>
+              <a href={`/ecosystem#${division.id}`} class="text-link">
+                {division.data.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <nav class="footer-col" aria-label="Connect">
+      <p class="footer-col__title">Connect</p>
+      <ul>
+        {
+          founderSocialLinks.map((link) => (
+            <li>
+              <a href={link.url} class="text-link" target="_blank" rel="noopener noreferrer">
+                {link.platform}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href="mailto:hello@alexandermathai.com" class="text-link">Email</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="wrap site-footer__bottom">
+    <p>&copy; {year} {site.name}. All rights reserved.</p>
+    <ul class="cluster">
+      {
+        footerLegal.map((item) => (
+          <li>
+            <a href={item.href} class="text-link">
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: var(--border-hairline);
+    padding-block-start: var(--space-6);
+    background: var(--color-bg-raised);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    padding-block-end: var(--space-5);
+  }
+
+  @media (max-width: 48rem) {
+    .site-footer__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .footer-col__title {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+    color: var(--color-text-faint);
+    margin-block-end: var(--space-2);
+  }
+
+  .footer-col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .footer-col a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+  }
+
+  .footer-relationship {
+    color: var(--color-text-muted);
+    max-width: 26rem;
+    margin-block: var(--space-2) var(--space-1);
+    font-size: 0.95rem;
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding-block: var(--space-3);
+    border-top: var(--border-hairline);
+    color: var(--color-text-faint);
+    font-size: 0.82rem;
+  }
+</style>

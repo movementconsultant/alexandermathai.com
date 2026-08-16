@@ -1,0 +1,81 @@
+---
+// Persistent theme toggle. Pairs with the anti-flash inline script in
+// BaseLayout.astro, which sets the initial [data-theme] before first paint.
+---
+
+<button
+  type="button"
+  id="theme-toggle"
+  class="theme-toggle"
+  aria-label="Switch between dark and light theme"
+>
+  <span class="theme-toggle__icon" aria-hidden="true" data-icon="dark">&#9789;</span>
+  <span class="theme-toggle__icon" aria-hidden="true" data-icon="light">&#9788;</span>
+  <span class="visually-hidden" id="theme-toggle-state"></span>
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+  }
+
+  .theme-toggle:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .theme-toggle__icon {
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  .theme-toggle__icon[data-icon="light"] {
+    display: none;
+  }
+
+  :root[data-theme="light"] .theme-toggle__icon[data-icon="dark"] {
+    display: none;
+  }
+
+  :root[data-theme="light"] .theme-toggle__icon[data-icon="light"] {
+    display: inline;
+  }
+</style>
+
+<script>
+  const btn = document.getElementById("theme-toggle");
+  const stateLabel = document.getElementById("theme-toggle-state");
+  const root = document.documentElement;
+
+  function currentTheme(): "dark" | "light" {
+    const explicit = root.getAttribute("data-theme");
+    if (explicit === "light" || explicit === "dark") return explicit;
+    return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  }
+
+  function announce() {
+    if (stateLabel) {
+      stateLabel.textContent = `Theme: ${currentTheme()}`;
+    }
+  }
+
+  announce();
+
+  btn?.addEventListener("click", () => {
+    const next = currentTheme() === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try {
+      localStorage.setItem("theme", next);
+    } catch {
+      /* storage unavailable — theme still applies for this page view */
+    }
+    announce();
+  });
+</script>

@@ -1,0 +1,72 @@
+---
+const steps = [
+  "Diagnose the actual constraint",
+  "Design the smallest system that solves it",
+  "Build owned infrastructure instead of rented dependency",
+  "Document decisions so the work can compound",
+  "Measure what changes",
+];
+---
+
+<section class="section thesis-teaser">
+  <div class="wrap thesis-teaser__grid">
+    <div>
+      <h2>The work is not a collection of brands. It is a method.</h2>
+      <p class="lede">
+        Every division of Texas Movement International — consulting, media, product, performance —
+        runs on the same underlying method. It's engineering-trained, applied to businesses instead
+        of structures.
+      </p>
+      <a href="/thesis" class="btn btn--secondary thesis-teaser__cta">Read the operating thesis</a>
+    </div>
+    <ol class="thesis-teaser__steps label-mono">
+      {
+        steps.map((step, i) => (
+          <li>
+            <span class="thesis-teaser__index">{String(i + 1).padStart(2, "0")}</span>
+            {step}
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .thesis-teaser__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: var(--space-5);
+  }
+
+  @media (max-width: 56rem) {
+    .thesis-teaser__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .thesis-teaser__cta {
+    margin-block-start: var(--space-3);
+  }
+
+  .thesis-teaser__steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    border-left: var(--border-hairline);
+    padding-inline-start: var(--space-3);
+  }
+
+  .thesis-teaser__steps li {
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .thesis-teaser__index {
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+  }
+</style>

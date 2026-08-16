@@ -1,0 +1,28 @@
+{
+  "name": "alexandermathai.com",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check",
+    "format": "prettier --check .",
+    "format:write": "prettier --write ."
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^7.0.5",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.2.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^6.0.3"
+  }
+}

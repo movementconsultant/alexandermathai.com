@@ -1,0 +1,97 @@
+---
+const capabilities = [
+  {
+    title: "Brand architecture",
+    outcome:
+      "The structural work beneath a brand — how its parts relate, and how it earns durable trust.",
+    href: "/work?category=brand-architecture",
+  },
+  {
+    title: "AI systems and operating design",
+    outcome:
+      "Applied AI inside the systems that actually run a business, not experiments left in a demo.",
+    href: "/work?category=ai-systems",
+  },
+  {
+    title: "Web and digital infrastructure",
+    outcome:
+      "Owned infrastructure — sites, content models, and data — built to survive growth and change.",
+    href: "/work?category=web-infrastructure",
+  },
+  {
+    title: "Media and content systems",
+    outcome:
+      "Distribution systems for editorial and content work, built to compound rather than one-off.",
+    href: "/work?category=media",
+  },
+  {
+    title: "Commerce and product ecosystems",
+    outcome: "Product, brand, and fulfillment infrastructure working as one system.",
+    href: "/work?category=commerce",
+  },
+  {
+    title: "Performance-informed strategy",
+    outcome:
+      "Systems thinking informed by biomechanics and performance culture, applied to operations.",
+    href: "/work?category=performance",
+  },
+];
+---
+
+<section class="section capabilities">
+  <div class="wrap">
+    <h2>Capabilities</h2>
+    <ul class="capabilities__grid">
+      {
+        capabilities.map((cap) => (
+          <li class="capabilities__item">
+            <h3>{cap.title}</h3>
+            <p>{cap.outcome}</p>
+            <a href={cap.href} class="text-link">
+              See related work &rarr;
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .capabilities__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-block-start: var(--space-4);
+    border-top: var(--border-hairline);
+    border-left: var(--border-hairline);
+  }
+
+  @media (max-width: 56rem) {
+    .capabilities__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .capabilities__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .capabilities__item {
+    border-right: var(--border-hairline);
+    border-bottom: var(--border-hairline);
+    padding: var(--space-3);
+  }
+
+  .capabilities__item h3 {
+    margin-block-end: 0.6rem;
+    font-size: 1.05rem;
+  }
+
+  .capabilities__item p {
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+    margin-block-end: 0.8rem;
+  }
+</style>

@@ -1,0 +1,212 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Button from "../../components/ui/Button.astro";
+import { formatDate } from "../../utils/reading-time";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("work", ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"work">;
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+
+const divisionLabel: Record<string, string> = {
+  "tmi-ecosystem": "TMI Ecosystem",
+  "texas-movement-consulting": "Texas Movement Consulting",
+  "texas-movement-media": "Texas Movement Media",
+  "hero-footwear": "HERO Footwear & Performance",
+  "texas-movement-performance": "Texas Movement Performance",
+  sweat: "SWEAT Boxing and Training",
+  independent: "Independent",
+};
+
+const outcomeCaveat =
+  data.evidenceLevel === "reported-by-founder" ? "As reported by the founder." : "";
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://alexandermathai.com/" },
+    { "@type": "ListItem", position: 2, name: "Work", item: "https://alexandermathai.com/work" },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: data.title,
+      item: `https://alexandermathai.com/work/${entry.id}`,
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={`${data.title} — Alexander Mathai`}
+  description={data.summary}
+  structuredData={[breadcrumbLd]}
+>
+  <article class="section section--tight work-detail">
+    <div class="wrap prose">
+      <p class="eyebrow">{divisionLabel[data.division]}</p>
+      <h1>{data.title}</h1>
+      <p class="lede">{data.summary}</p>
+      <p class="label-mono">
+        {formatDate(data.publishDate)}{
+          data.updatedDate && ` · Updated ${formatDate(data.updatedDate)}`
+        }
+      </p>
+    </div>
+  </article>
+
+  <section class="section">
+    <div class="wrap work-detail__grid">
+      <div class="prose work-detail__body">
+        {
+          data.constraint && (
+            <div class="work-detail__block">
+              <h2>The constraint</h2>
+              <p>{data.constraint}</p>
+            </div>
+          )
+        }
+        {
+          data.systemArchitecture && (
+            <div class="work-detail__block">
+              <h2>System architecture</h2>
+              <p>{data.systemArchitecture}</p>
+            </div>
+          )
+        }
+        <div class="work-detail__block">
+          <Content />
+        </div>
+        {
+          data.whatChanged && (
+            <div class="work-detail__block">
+              <h2>What changed</h2>
+              <p>{data.whatChanged}</p>
+            </div>
+          )
+        }
+      </div>
+
+      <aside class="work-detail__aside">
+        {
+          data.role && (
+            <div class="card">
+              <p class="label-mono">Role</p>
+              <p>{data.role}</p>
+            </div>
+          )
+        }
+        {
+          data.deliverables.length > 0 && (
+            <div class="card">
+              <p class="label-mono">Deliverables / components</p>
+              <ul class="work-detail__deliverables">
+                {data.deliverables.map((d) => (
+                  <li>{d}</li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+        {
+          data.outcome && (
+            <div class="card">
+              <p class="label-mono">Evidence / outcome</p>
+              <p>{data.outcome}</p>
+              {outcomeCaveat && <p class="work-detail__caveat">{outcomeCaveat}</p>}
+            </div>
+          )
+        }
+        <div class="card">
+          <p class="label-mono">Next</p>
+          {
+            data.relatedNoteSlug && (
+              <p>
+                <a href={`/notes/${data.relatedNoteSlug}`} class="text-link">
+                  Related note &rarr;
+                </a>
+              </p>
+            )
+          }
+          {
+            data.relatedEcosystemSlug && (
+              <p>
+                <a href={`/ecosystem#${data.relatedEcosystemSlug}`} class="text-link">
+                  Related ecosystem division &rarr;
+                </a>
+              </p>
+            )
+          }
+          <p><a href="/contact" class="text-link">Discuss a similar system &rarr;</a></p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap">
+      <Button href="/work" variant="secondary">&larr; Back to all work</Button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .work-detail__grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: var(--space-5);
+    align-items: start;
+  }
+
+  @media (max-width: 56rem) {
+    .work-detail__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .work-detail__block {
+    margin-block-end: var(--space-4);
+  }
+
+  .work-detail__block h2 {
+    margin-block-end: var(--space-1);
+    font-size: 1.3rem;
+  }
+
+  .work-detail__block p {
+    color: var(--color-text-muted);
+  }
+
+  .work-detail__aside {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    position: sticky;
+    top: 6rem;
+  }
+
+  .work-detail__deliverables {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-block-start: 0.3rem;
+  }
+
+  .work-detail__caveat {
+    color: var(--color-text-faint);
+    font-size: 0.8rem;
+    margin-block-start: 0.25rem;
+  }
+</style>

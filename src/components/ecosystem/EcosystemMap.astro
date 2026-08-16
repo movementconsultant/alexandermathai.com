@@ -1,0 +1,89 @@
+---
+import { getCollection } from "astro:content";
+import { tmiUrl } from "../../data/social";
+
+const divisions = (await getCollection("ecosystem")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<div class="ecosystem-map">
+  <p class="label-mono">One founder. One umbrella. Multiple operating expressions.</p>
+  <div class="ecosystem-map__tree">
+    <div class="ecosystem-map__node ecosystem-map__node--founder">Alexander Mathai</div>
+    <div class="ecosystem-map__connector" aria-hidden="true"></div>
+    <div class="ecosystem-map__node ecosystem-map__node--tmi">
+      <a href={tmiUrl} target="_blank" rel="noopener noreferrer">Texas Movement International</a>
+    </div>
+    <div class="ecosystem-map__connector ecosystem-map__connector--wide" aria-hidden="true"></div>
+    <ul class="ecosystem-map__divisions">
+      {
+        divisions.map((division) => (
+          <li>
+            <a href={`#${division.id}`} class="ecosystem-map__node ecosystem-map__node--division">
+              {division.data.name}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<style>
+  .ecosystem-map__tree {
+    margin-block-start: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .ecosystem-map__node {
+    border: var(--border-hairline);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1.25rem;
+    background: var(--color-bg-raised);
+    font-weight: 600;
+  }
+
+  .ecosystem-map__node a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .ecosystem-map__node--founder {
+    font-family: var(--font-display);
+  }
+
+  .ecosystem-map__node--tmi {
+    border-color: var(--color-accent);
+  }
+
+  .ecosystem-map__connector {
+    width: 1px;
+    height: var(--space-3);
+    background: var(--color-border-strong);
+  }
+
+  .ecosystem-map__connector--wide {
+    height: var(--space-2);
+  }
+
+  .ecosystem-map__divisions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2);
+    max-width: 60rem;
+  }
+
+  .ecosystem-map__node--division {
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-block;
+  }
+
+  .ecosystem-map__node--division:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+</style>

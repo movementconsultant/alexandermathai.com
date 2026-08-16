@@ -1,0 +1,27 @@
+# Content needed
+
+Everything below is either a marked `draft: true` entry excluded from the production build, or a
+gap logged here per the governance rule in brief §9: don't fabricate, don't use lorem ipsum, don't
+ship a fake case study — mark it, log it, wait for the real thing.
+
+| Item | Needed information | Intended page | Why it matters | Current status |
+|---|---|---|---|---|
+| Founder portrait photo | A rights-cleared portrait image file (recommend `public/founder-portrait.jpg` or `.webp`, roughly 1200×1500px, edited to the site's muted, precise visual direction) | `/` hero, `/about` | The brief specifies an editorial portrait as the preferred hero visual; no photo file exists in this build environment, so a typographic/diagrammatic visual is used instead | Not shipped — code expects no image path yet; drop the file in and wire it into `src/components/home/Hero.astro` |
+| Founder action/work photo | A second rights-cleared photo (e.g. `public/founder-action.jpg`) for `/about` or a work-detail page | `/about`, selected `/work/[slug]` | Adds visual proof alongside the timeline and evidence list | Not shipped |
+| Contact-form delivery backend | An email-delivery service (Resend, Formspree, a Cloudflare Pages Function, etc.) and its endpoint URL | `/contact` | The form is fully built (validation, honeypot, accessible errors, success/failure states) but has no `PUBLIC_CONTACT_ENDPOINT` set, so it cannot deliver anywhere yet | UI complete; integration point documented in `docs/site-operations.md` |
+| Verified social/umbrella URLs | Confirmation that each URL in `src/data/social.ts` (LinkedIn, YouTube ×4, Instagram ×3, TikTok ×3) and `texasmovement.com` actually resolves to the correct, live account | Header/footer utility nav, `/about`, `/ecosystem` | This build environment has no general web egress, so none of these could be checked; they're rendered as given but flagged `verified: false` | Needs a human check before launch |
+| Individual consulting case study | A specific, nameable (or explicitly anonymized, with permission) client engagement: constraint, system built, outcome | `/work/consulting-case-study-deep-dive` | The current consulting System Brief is a practice-wide summary (150+ clients); a single detailed case study would be stronger proof, but requires real, permitted detail | `draft: true`, excluded from production |
+| TMM media note | A specific Texas Movement Media video/episode to reference, with a real quote or synthesis | `/notes/media-note-draft-placeholder` | Notes currently include general essays and a build log, but no note tied to a specific piece of media output | `draft: true`, excluded from production |
+| FounderLink mandate | A real one-sentence mandate describing what FounderLink actually does | `/ecosystem` | The current card only states that it's an early-stage initiative, since no description was given anywhere in the brief or task context | Shipped with a minimal, honest placeholder mandate — not a content draft, but incomplete |
+| Testimonials | Any client/partner testimonial, with confirmed permission to publish it (name, quote, and context) | `/work`, `/about` | None were supplied; the brief explicitly requires source support for testimonials | Not built — no testimonial component exists yet since there's nothing to populate it with |
+| Per-route OG images | Route-specific Open Graph images (work items, notes, thesis) beyond the single default | All indexable routes | Brief asks for "route-specific OG images where practical"; without real photography/brand assets, per-route images would be near-duplicates of the default | Deferred; `public/og/default.png` used sitewide for now |
+| `/now` page | A specific, current "what I'm focused on right now" content source | `/now` (not built) | Brief makes this page conditional on a usable content source existing; none does | Not shipped, per the brief's own instruction |
+
+## Note on `evidenceLevel`
+
+Every published `work` entry uses `evidenceLevel: "reported-by-founder"` except the site-rebuild
+entry itself (`documented`, since it's verifiable in this repository). None claim independent,
+third-party verification. If the owner can supply independent documentation for any of these
+(press coverage, screenshots, analytics exports, signed testimonials), upgrading the
+`evidenceLevel` field and adjusting the UI copy in `src/components/work/SystemBriefCard.astro`
+and `src/pages/work/[slug].astro` is a small, contained change.

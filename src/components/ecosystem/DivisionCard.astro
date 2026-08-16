@@ -1,0 +1,79 @@
+---
+import type { CollectionEntry } from "astro:content";
+import StatusBadge from "../ui/StatusBadge.astro";
+
+interface Props {
+  division: CollectionEntry<"ecosystem">;
+}
+
+const { division } = Astro.props;
+const { data, id } = division;
+
+const tone =
+  data.status === "operating" || data.status === "available" || data.status === "publishing"
+    ? "active"
+    : data.status === "select-engagements"
+      ? "progress"
+      : "neutral";
+---
+
+<article class="card division-card" id={id}>
+  <div class="division-card__head">
+    <h3>{data.name}</h3>
+    <StatusBadge label={data.statusLabel} tone={tone} />
+  </div>
+  <p class="division-card__mandate">{data.mandate}</p>
+  <p class="division-card__relationship">{data.relationshipToTmi}</p>
+
+  {
+    data.channels.length > 0 && (
+      <ul class="division-card__channels cluster">
+        {data.channels.map((ch) => (
+          <li>
+            <a href={ch.url} class="text-link" target="_blank" rel="noopener noreferrer">
+              {ch.platform}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  <a href={data.internalRoute ?? "/contact"} class="text-link division-card__cta">
+    {data.internalRoute === "/contact" ? "Start a conversation" : "Learn more"} &rarr;
+  </a>
+</article>
+
+<style>
+  .division-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    scroll-margin-top: 6rem;
+  }
+
+  .division-card__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .division-card__mandate {
+    color: var(--color-text);
+  }
+
+  .division-card__relationship {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+
+  .division-card__channels {
+    font-size: 0.85rem;
+  }
+
+  .division-card__cta {
+    margin-block-start: 0.4rem;
+  }
+</style>

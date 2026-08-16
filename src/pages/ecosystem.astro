@@ -1,0 +1,175 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import EcosystemMap from "../components/ecosystem/EcosystemMap.astro";
+import DivisionCard from "../components/ecosystem/DivisionCard.astro";
+import Button from "../components/ui/Button.astro";
+import { organizationSchema } from "../data/site";
+
+const divisions = (await getCollection("ecosystem")).sort((a, b) => a.data.order - b.data.order);
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://alexandermathai.com/" },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Ecosystem",
+      item: "https://alexandermathai.com/ecosystem",
+    },
+  ],
+};
+
+// No `sameAs` here deliberately: the umbrella site (texasmovement.com) could
+// not be network-verified in this build environment, and governance (brief
+// §10) restricts `sameAs` to verified live profiles only.
+const organizationLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: organizationSchema.name,
+  foundingDate: organizationSchema.foundingDate,
+  founder: { "@type": "Person", name: "Alexander Mathai" },
+};
+
+const nextSteps = [
+  {
+    audience: "Founders and operators looking for consulting",
+    action: "Start with Texas Movement Consulting, then reach out directly.",
+    href: "#texas-movement-consulting",
+  },
+  {
+    audience: "Media, press, or collaboration contacts",
+    action: "Texas Movement Media covers sports, performance, founders, and culture.",
+    href: "#texas-movement-media",
+  },
+  {
+    audience: "Product, retail, or performance-culture audiences",
+    action: "HERO Footwear & Performance and Texas Movement Performance.",
+    href: "#hero-footwear",
+  },
+  {
+    audience: "Anyone who just wants to understand Alexander's work",
+    action: "Read the operating thesis or the selected work.",
+    href: "/thesis",
+  },
+];
+---
+
+<BaseLayout
+  title="Ecosystem — Alexander Mathai / Texas Movement International"
+  description="A visual, accessible map of Texas Movement International and its divisions — their relationship, mandate, current status, and where to go next."
+  structuredData={[breadcrumbLd, organizationLd]}
+>
+  <section class="section section--tight">
+    <div class="wrap prose">
+      <p class="eyebrow">Ecosystem</p>
+      <h1>One founder. One umbrella. Multiple operating expressions.</h1>
+      <p class="lede">
+        Texas Movement International is the umbrella Alexander Mathai founded in 2015. Everything
+        below sits under it — at different stages of maturity, on purpose.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Ecosystem map">
+    <div class="wrap">
+      <EcosystemMap />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="visually-hidden">Divisions</h2>
+      <ul class="ecosystem-grid">
+        {
+          divisions.map((division) => (
+            <li>
+              <DivisionCard division={division} />
+            </li>
+          ))
+        }
+      </ul>
+      <p class="label-mono ecosystem-disclosure">
+        Divisions above operate at different stages — some accept select engagements now, others are
+        actively publishing, and several are still in development. Status labels reflect where each
+        one actually stands today, not where it's headed.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap prose">
+      <h2>Why these divisions belong together</h2>
+      <p>
+        Every division runs on the same underlying method: diagnose the real constraint, build the
+        smallest owned system that resolves it, and document it so it compounds. Consulting applies
+        that to other people's businesses. Media applies it to storytelling and distribution. HERO
+        applies it to product and commerce. Performance applies it to training systems. They're
+        different outputs of one operating approach, not unrelated side projects.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Where to go next</h2>
+      <ul class="next-steps">
+        {
+          nextSteps.map((step) => (
+            <li class="card next-steps__item">
+              <p class="label-mono">{step.audience}</p>
+              <p>{step.action}</p>
+              <a href={step.href} class="text-link">
+                Go there &rarr;
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap thesis-cta">
+      <div>
+        <h2>Not sure where to start?</h2>
+        <p class="lede">Every path through the ecosystem ends at the same place.</p>
+      </div>
+      <Button href="/contact" variant="primary">Discuss a system</Button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ecosystem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: var(--space-3);
+  }
+
+  .ecosystem-disclosure {
+    margin-block-start: var(--space-4);
+    max-width: var(--measure-wide);
+  }
+
+  .next-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--space-3);
+  }
+
+  .next-steps__item p:not(.label-mono) {
+    color: var(--color-text-muted);
+    margin-block: 0.4rem 0.6rem;
+  }
+
+  .thesis-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+</style>
