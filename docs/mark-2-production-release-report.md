@@ -56,17 +56,26 @@ ad hoc script this pass, same as the prior audit pass) is listed under owner ver
 
 ## Cloudflare Pages project
 
-**Not determinable from repository configuration.** No `wrangler.toml` existed in this repo
-before this pass (unlike its sibling repos, which all carry one) — added this pass as scaffolding
-(`pages_build_output_dir = "dist"`, project name `alexandermathai-com`) so the repo is
-one-click-ready, but this environment has no Cloudflare credentials or CLI session, so:
+**Correction (later pass, same day):** a connected project DOES exist — discovered via the
+GitHub Checks API and the Cloudflare Pages bot's PR comment, not via any Cloudflare
+credentials (this environment still has none). Project name **`alexandermathai`**, Cloudflare
+account `c98bb3dd9f79a1a49ad9af7c44cd1259`. Every push to this PR's branch triggers a real preview
+build automatically; the latest (commit `d4eee43`) completed successfully:
 
-- No existing Cloudflare Pages project name could be confirmed or denied.
-- No existing custom-domain binding could be inspected.
-- No Cloudflare Pages preview deployment exists or could be inspected for this branch.
+- Preview URL: `https://024a5366.alexandermathai.pages.dev`
+- Branch preview URL: `https://claude-founder-control-tower.alexandermathai.pages.dev`
+- Cloudflare dashboard log: `https://dash.cloudflare.com/?to=/c98bb3dd9f79a1a49ad9af7c44cd1259/pages/view/alexandermathai/024a5366-620d-489c-ba3f-c3ce3abf76a5`
 
-This is an owner-confirmation item, not a blocker created by this pass — see "Risks/owner
-confirmations."
+**This environment could not fetch or inspect the content of either preview URL** — both `curl`
+and the `WebFetch` tool return an egress-proxy block (`EGRESS_BLOCKED`) for `*.pages.dev`
+domains, consistent with this environment's general no-web-access posture throughout this whole
+project. So: the project's existence, name, and build-success status are confirmed (via
+authenticated GitHub data); the actual rendered output of the preview (robots meta, canonical,
+link behavior) is **not** independently verified from this session — someone with real browser or
+unblocked network access needs to do that inspection before treating the preview as validated.
+
+No custom-domain binding for `alexandermathai.com` itself could be confirmed or denied — the
+Cloudflare dashboard link above is the way to check that, not available from this environment.
 
 ## Branch to deploy
 
@@ -127,9 +136,11 @@ release; it's carried forward as post-launch priority #1.
 
 ## Owner verification items still required
 
-1. **Cloudflare Pages project/domain binding** — confirm whether a project already exists for
-   this repo, or create one, and connect the custom domain + `www` binding. Not determinable from
-   this environment (no Cloudflare credentials).
+1. **Cloudflare Pages custom-domain binding** — the project itself is confirmed to exist
+   (`alexandermathai`, see "Cloudflare Pages project" above) and is auto-deploying previews
+   successfully. What's still unconfirmed from this environment: whether `alexandermathai.com`
+   and `www.alexandermathai.com` are already bound as custom domains on that project, and what
+   its production-branch setting is. Check the Cloudflare dashboard link above.
 2. **Social URLs** — manually open and confirm each of the 11 URLs in `src/data/social.ts`
    before flipping any `verified: true`.
 3. **The 7 flagged claims** (2015 founding, 2.1M+ views, 150+ clients, SWEAT/HERO figures, About
@@ -143,8 +154,10 @@ release; it's carried forward as post-launch priority #1.
 
 ## Exact production checklist
 
-1. Confirm/create the Cloudflare Pages project for this repo; set build command `npm run build`,
-   output directory `dist`.
+1. Project already exists (`alexandermathai`, confirmed this session) and is auto-deploying
+   preview builds successfully. Confirm its build command is `npm run build` and output directory
+   `dist` in the Cloudflare dashboard (not verified from this environment — the automatic preview
+   builds succeeding is strong evidence this is already correct).
 2. Merge `claude/founder-control-tower-rebuild` (commit `baac401`) into `main` — only after the
    owner's explicit release approval (see release question).
 3. Set the production environment variable `PUBLIC_PREVIEW=false` on the Cloudflare Pages
@@ -204,10 +217,18 @@ by integration`) — unrelated to this repo's own launch readiness, tracked in t
 
 ## Cloudflare Pages preview check
 
-**Not performed — no preview deployment exists to inspect.** This environment has no Cloudflare
-credentials, and no evidence in the repo (`wrangler.toml` did not exist before this pass; no
-`.wrangler` state, no recorded project ID) indicates an existing Pages project for this repo.
-Per Section 6's explicit instruction, this is reported honestly rather than assumed: **the exact
-action needed is for the owner (or someone with Cloudflare dashboard access) to connect this repo
-to a Cloudflare Pages project, which will then produce a real, inspectable preview URL** for the
-branch before any production DNS work proceeds.
+**Corrected (later pass, same day): a preview deployment does exist, and its existence/build
+success was confirmed — its content could not be inspected.** A Cloudflare Pages project
+(`alexandermathai`) is already connected and auto-deploys this branch on every push; the GitHub
+Checks API and the Cloudflare Pages bot's PR comment confirm the latest push (commit `d4eee43`)
+built and deployed successfully to `https://024a5366.alexandermathai.pages.dev` (and a stable
+branch alias, `https://claude-founder-control-tower.alexandermathai.pages.dev`). Both `curl` and
+the `WebFetch` tool were tried against these URLs from this session and both returned an
+egress-proxy block (`EGRESS_BLOCKED`) — this sandbox cannot reach `*.pages.dev` domains, so the
+required content checks (noindex/nofollow meta, restrictive preview robots, no canonical/OG/
+JSON-LD/RSS/sitemap leaks, only-verified-links-active, honest contact-path behavior) could **not**
+be performed against the live preview from this environment. **The exact action needed: someone
+with unrestricted network access (or the Cloudflare dashboard itself) opens the preview URL above
+and confirms those same checks that were already verified against the local build output** (see
+"Final test results and commands run") — the local-build results should match, but that's an
+assumption pending real confirmation, not a substitute for it.
