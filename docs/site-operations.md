@@ -98,21 +98,44 @@ this PR's description). For when the owner is ready:
 ## Contact-form integration point
 
 The form at `/contact` (`src/pages/contact.astro`) is fully built — fields, client-side
-validation, accessible errors, a honeypot field, and both a "not yet connected" state and real
-success/failure states. It currently has no backend:
+validation, accessible errors, a honeypot field — but is deliberately **inert**: it has no
+submission endpoint of any kind, cannot send/collect/store data, and always resolves a valid
+submission to the honest "not yet connected" status message. This is intentional (see
+`docs/mark-2-vertical-audit.md`-style governance across this ecosystem's "no unverified submission
+capability shipped" rule) — there is currently no env-var toggle that activates a backend.
+
+To connect a real backend once one is owner-approved and verified, this requires an actual code
+change, not just configuration:
 
 1. Stand up an email-delivery endpoint (a Cloudflare Pages Function, a Resend/Formspree endpoint,
    etc.) that accepts a `POST` with form-encoded fields and returns a 2xx on success.
-2. Set `PUBLIC_CONTACT_ENDPOINT` to that URL as a build-time environment variable.
-3. The existing client script in `src/pages/contact.astro` will automatically switch from the
-   "not yet connected" message to a real `fetch()` POST, and will show the real success/failure
-   state based on the response — no other code changes needed.
-4. Apply rate limiting on the endpoint itself (the client already disables the submit button
-   during a request and rejects honeypot-filled submissions, but real rate limiting has to live
-   server-side).
-5. Never wire this to anything that implies a fixed response-time commitment or an automated
+2. In `src/pages/contact.astro`'s `<script>`, reintroduce a `CONTACT_ENDPOINT` read (e.g. from a
+   `PUBLIC_CONTACT_ENDPOINT` env var) and a `fetch()` POST branch in the submit handler, replacing
+   the current unconditional "not yet connected" status call — and remove the `onsubmit="return
+false;"` hardening on the `<form>` element only once that real POST path exists (it exists
+   specifically to guarantee no native form submission can leak field data via a GET-with-
+   query-string fallback while no backend is connected).
+3. Apply rate limiting on the endpoint itself (the client already rejects honeypot-filled
+   submissions, but real rate limiting has to live server-side).
+4. Never wire this to anything that implies a fixed response-time commitment or an automated
    booking/scheduling flow — both are explicitly excluded by brief §9 and the current copy on the
    page reflects that.
+5. Re-run the public-output guard (see below) after this change — it will fail the build if it
+   detects an external `fetch()` target or form `action` without a matching deliberate update to
+   the guard itself, by design.
+
+## Public-output guard
+
+`scripts/postbuild-guard.mjs` scans every text file in `dist/` after each build (wired as the
+`postbuild` npm script, so `npm run build` runs it automatically; run it standalone with
+`npm run guard` against an existing `dist/`). It fails the build on: literal `TBD`/`__TBD__`,
+`mailto:` links or bare email-address-shaped strings, any href to a known social platform domain
+(all currently `verified: false`), any `fetch()`/`<form action>` targeting an external URL
+(evidence of an unverified contact-form endpoint), any `lexmathai` reference, and — in preview
+builds — any HTML page missing its `noindex` robots meta tag. Never weaken a check here to make a
+build pass; fix the underlying content or, for a deliberate and reviewed change (e.g. actually
+connecting a verified contact backend), update the guard in the same commit that makes the change
+it now needs to allow.
 
 ## Content governance rules (carried forward from the rebuild brief)
 

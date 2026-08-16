@@ -59,7 +59,7 @@ const breadcrumbLd = {
 
   <section class="section contact-section">
     <div class="wrap contact-grid">
-      <form id="contact-form" class="contact-form" novalidate>
+      <form id="contact-form" class="contact-form" novalidate onsubmit="return false;">
         <div class="form-field">
           <label for="field-name">Name <span aria-hidden="true">*</span></label>
           <input
@@ -302,13 +302,15 @@ const breadcrumbLd = {
 
 <script>
   const form = document.getElementById("contact-form") as HTMLFormElement | null;
-  const submitBtn = document.getElementById("contact-submit") as HTMLButtonElement | null;
   const statusEl = document.getElementById("form-status");
 
-  // Integration point: once a real inbox/service is connected, set this via a
-  // public env var and this script will POST instead of showing the
-  // not-yet-connected state. See docs/site-operations.md.
-  const CONTACT_ENDPOINT = import.meta.env.PUBLIC_CONTACT_ENDPOINT as string | undefined;
+  // No submission endpoint exists in this build, deliberately: there is no
+  // owner-approved, verified delivery backend for this form yet. This form
+  // cannot collect, send, or store data anywhere — it only validates fields
+  // client-side and shows an honest "not connected" status. Re-adding a real
+  // endpoint requires a reviewed code change here (not just an env var),
+  // matching this ecosystem's "no unverified submission capability shipped"
+  // rule. See docs/mark-2-launch-plan.md "Contact-form decision".
 
   const requiredFields = [
     { id: "field-name", errorId: "error-name", message: "Enter your name." },
@@ -386,7 +388,7 @@ const breadcrumbLd = {
     statusEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
-  form?.addEventListener("submit", async (event) => {
+  form?.addEventListener("submit", (event) => {
     event.preventDefault();
     if (statusEl) statusEl.hidden = true;
 
@@ -405,35 +407,12 @@ const breadcrumbLd = {
       return;
     }
 
-    if (!CONTACT_ENDPOINT) {
-      setStatus(
-        "This form isn't connected to a delivery service yet, so this inquiry can't be sent from this page right now. There's no other verified contact route published here yet either — please check back soon.",
-        "pending-integration",
-      );
-      return;
-    }
-
-    submitBtn?.setAttribute("disabled", "true");
-    try {
-      const formData = new FormData(form);
-      const response = await fetch(CONTACT_ENDPOINT, {
-        method: "POST",
-        body: formData,
-        headers: { Accept: "application/json" },
-      });
-      if (response.ok) {
-        setStatus(
-          "Thanks — your inquiry has been received. There's no fixed response-time guarantee, but it will be reviewed.",
-          "success",
-        );
-        form.reset();
-      } else {
-        setStatus("Something went wrong sending this. Please try again shortly.", "error");
-      }
-    } catch {
-      setStatus("Something went wrong sending this. Please try again shortly.", "error");
-    } finally {
-      submitBtn?.removeAttribute("disabled");
-    }
+    // No delivery backend exists in this build (see the note above the
+    // requiredFields declaration) — this is the only outcome a valid
+    // submission can reach. Nothing is sent, stored, or promised.
+    setStatus(
+      "This form isn't connected to a delivery service yet, so this inquiry can't be sent from this page right now. There's no other verified contact route published here yet either — please check back soon.",
+      "pending-integration",
+    );
   });
 </script>
