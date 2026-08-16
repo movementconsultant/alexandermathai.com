@@ -4,6 +4,17 @@ import Header from "../components/site/Header.astro";
 import Footer from "../components/site/Footer.astro";
 import { site, defaultSeo, personSchema } from "../data/site";
 
+/**
+ * Preview/production gate, matching the convention used across every other
+ * repo in this ecosystem: PUBLIC_PREVIEW defaults to true (safe) so a
+ * missing or misconfigured env var never accidentally ships an indexable
+ * build. Set PUBLIC_PREVIEW=false explicitly for a real production build.
+ * This was previously missing from this repo — noindex defaulted to
+ * `false`, meaning every page except /404 shipped indexable by default.
+ * See docs/mark-2-release-audit.md.
+ */
+const PUBLIC_PREVIEW = import.meta.env.PUBLIC_PREVIEW !== "false";
+
 interface Props {
   title: string;
   description?: string;
@@ -17,7 +28,7 @@ const {
   title,
   description = defaultSeo.description,
   ogImage = defaultSeo.ogImage,
-  noindex = false,
+  noindex = PUBLIC_PREVIEW,
   structuredData = [],
   bodyClass = "",
 } = Astro.props;

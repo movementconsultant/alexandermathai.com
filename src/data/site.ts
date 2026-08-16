@@ -23,8 +23,15 @@ export const defaultSeo = {
   ogImage: "/og/default.png",
 } as const;
 
+/**
+ * No contact email is set here deliberately. The previous build invented
+ * "hello@alexandermathai.com" — a plausible-looking address the owner never
+ * actually supplied, rendered as a live mailto link in two places. That
+ * address has been removed everywhere; do not re-add an email address here
+ * unless the owner explicitly provides one to use. See
+ * docs/mark-2-release-audit.md.
+ */
 export const contact = {
-  email: "hello@alexandermathai.com",
   formNote:
     "The form below routes inquiries for review. There is no automated booking system and no fixed response-time guarantee.",
 } as const;

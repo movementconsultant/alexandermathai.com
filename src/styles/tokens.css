@@ -62,11 +62,11 @@
     --color-border-strong: #b9b3a3;
     --color-text: #17181a;
     --color-text-muted: #4d4f52;
-    --color-text-faint: #6c6e70;
+    --color-text-faint: #5a5c5e; /* darkened from #6c6e70 — that failed WCAG AA (4.33:1) against --color-bg-raised; this reaches 5.68:1. See docs/mark-2-release-audit.md. */
     --color-accent: #ad350e;
     --color-accent-text: #fffaf4;
     --color-focus: #ad350e;
-    --color-positive: #2f7a41;
+    --color-positive: #256a3c; /* darkened from #2f7a41 — that failed WCAG AA (4.46:1) on the "Publishing" status badge; this reaches 5.55:1. See docs/mark-2-release-audit.md. */
     --color-caution: #8a6415;
     color-scheme: light;
   }
@@ -86,7 +86,7 @@
   --color-accent: #ad350e;
   --color-accent-text: #fffaf4;
   --color-focus: #ad350e;
-  --color-positive: #2f7a41;
+  --color-positive: #256a3c; /* darkened from #2f7a41 — that failed WCAG AA (4.46:1) on the "Publishing" status badge; this reaches 5.55:1. See docs/mark-2-release-audit.md. */
   --color-caution: #8a6415;
   color-scheme: light;
 }

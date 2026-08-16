@@ -26,16 +26,21 @@ const tone =
   <p class="division-card__relationship">{data.relationshipToTmi}</p>
 
   {
+    /* Channel URLs are intentionally not rendered as live links: this
+       content collection doesn't track per-item verification, and the
+       equivalent entries in src/data/social.ts are all `verified: false` in
+       this build (no general web egress was available to confirm any of
+       them). Platform names render as plain text instead of unconfirmed
+       outbound links — see docs/mark-2-release-audit.md and
+       docs/ecosystem-governance.md for how to safely re-enable real links
+       once a platform/handle is verified. */
+  }
+  {
     data.channels.length > 0 && (
-      <ul class="division-card__channels cluster">
-        {data.channels.map((ch) => (
-          <li>
-            <a href={ch.url} class="text-link" target="_blank" rel="noopener noreferrer">
-              {ch.platform}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <p class="division-card__channels-note">
+        Also publishing on {data.channels.map((ch) => ch.platform).join(", ")} (links pending
+        verification)
+      </p>
     )
   }
 
@@ -69,8 +74,9 @@ const tone =
     font-size: 0.9rem;
   }
 
-  .division-card__channels {
+  .division-card__channels-note {
     font-size: 0.85rem;
+    color: var(--color-text-faint);
   }
 
   .division-card__cta {

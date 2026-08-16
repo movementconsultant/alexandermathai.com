@@ -1,7 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Button from "../components/ui/Button.astro";
-import { founderSocialLinks, tmiUrl } from "../data/social";
+import { founderSocialLinks, tmiUrl, tmiUrlVerified } from "../data/social";
+
+const verifiedFounderSocialLinks = founderSocialLinks.filter((l) => l.verified);
 import { site } from "../data/site";
 
 const timeline = [
@@ -155,29 +157,38 @@ const profilePageLd = {
       <p>
         Alexander is the founder and individual point of view behind Texas Movement International.
         This site is his — the umbrella organization,{" "}
-        <a href={tmiUrl} class="text-link" target="_blank" rel="noopener noreferrer"
-          >Texas Movement International</a
-        >, is where the divisions he's built live and operate at their own pace.
+        {
+          tmiUrlVerified ? (
+            <a href={tmiUrl} class="text-link" target="_blank" rel="noopener noreferrer">
+              Texas Movement International
+            </a>
+          ) : (
+            "Texas Movement International"
+          )
+        }
+        , is where the divisions he's built live and operate at their own pace.
       </p>
     </div>
   </section>
 
   <section class="section section--tight">
     <div class="wrap about-connect">
-      <div>
-        <h2>Where to connect</h2>
-        <ul class="cluster about-connect__links">
-          {
-            founderSocialLinks.map((link) => (
-              <li>
-                <a href={link.url} class="text-link" target="_blank" rel="noopener noreferrer">
-                  {link.platform}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
+      {
+        verifiedFounderSocialLinks.length > 0 && (
+          <div>
+            <h2>Where to connect</h2>
+            <ul class="cluster about-connect__links">
+              {verifiedFounderSocialLinks.map((link) => (
+                <li>
+                  <a href={link.url} class="text-link" target="_blank" rel="noopener noreferrer">
+                    {link.platform}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
       <Button href="/contact" variant="primary">Discuss a system</Button>
     </div>
   </section>

@@ -1,11 +1,17 @@
 ---
 import { getCollection } from "astro:content";
 import { footerNav, footerLegal } from "../../data/nav";
-import { founderSocialLinks, tmiUrl } from "../../data/social";
+import { founderSocialLinks, tmiUrl, tmiUrlVerified } from "../../data/social";
 import { site } from "../../data/site";
 
 const divisions = (await getCollection("ecosystem")).sort((a, b) => a.data.order - b.data.order);
 const year = new Date().getFullYear();
+
+// Only ever render social links marked verified — see src/data/social.ts.
+// As of this build, every entry is verified: false, so this list is empty
+// and the "Connect" column is omitted entirely rather than shown with dead
+// or unconfirmed links.
+const verifiedFounderSocialLinks = founderSocialLinks.filter((l) => l.verified);
 ---
 
 <footer class="site-footer">
@@ -14,9 +20,15 @@ const year = new Date().getFullYear();
       <p class="brand-mark">{site.name}</p>
       <p class="footer-relationship">
         Founder &amp; President of{" "}
-        <a href={tmiUrl} class="text-link" target="_blank" rel="noopener noreferrer">
-          Texas Movement International
-        </a>
+        {
+          tmiUrlVerified ? (
+            <a href={tmiUrl} class="text-link" target="_blank" rel="noopener noreferrer">
+              Texas Movement International
+            </a>
+          ) : (
+            "Texas Movement International"
+          )
+        }
         , the umbrella for the ecosystem below.
       </p>
       <p class="label-mono">{site.region}</p>
@@ -52,23 +64,22 @@ const year = new Date().getFullYear();
       </ul>
     </nav>
 
-    <nav class="footer-col" aria-label="Connect">
-      <p class="footer-col__title">Connect</p>
-      <ul>
-        {
-          founderSocialLinks.map((link) => (
-            <li>
-              <a href={link.url} class="text-link" target="_blank" rel="noopener noreferrer">
-                {link.platform}
-              </a>
-            </li>
-          ))
-        }
-        <li>
-          <a href="mailto:hello@alexandermathai.com" class="text-link">Email</a>
-        </li>
-      </ul>
-    </nav>
+    {
+      verifiedFounderSocialLinks.length > 0 && (
+        <nav class="footer-col" aria-label="Connect">
+          <p class="footer-col__title">Connect</p>
+          <ul>
+            {verifiedFounderSocialLinks.map((link) => (
+              <li>
+                <a href={link.url} class="text-link" target="_blank" rel="noopener noreferrer">
+                  {link.platform}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
   </div>
 
   <div class="wrap site-footer__bottom">

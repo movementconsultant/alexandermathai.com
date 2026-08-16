@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { contact } from "../data/site";
 ---
 
 <BaseLayout
@@ -22,9 +21,10 @@ import { contact } from "../data/site";
         This site is a static site with one form: the contact form at <a
           href="/contact"
           class="text-link">/contact</a
-        >. When you submit it, the information you enter (name, organization, email, and the details
-        you provide about your inquiry) is sent for review by Alexander Mathai. It is not sold, and
-        it is not used for anything beyond responding to your inquiry.
+        >. That form is not yet connected to a delivery service — as of now, submitting it does not
+        send your information anywhere. Once a delivery destination is connected, this page will be
+        updated to describe exactly what's collected (name, organization, email, and the details you
+        provide about your inquiry) and how it's used; it will not be sold.
       </p>
       <p>
         The theme preference (light or dark) you choose is stored in your browser's local storage,
@@ -46,8 +46,10 @@ import { contact } from "../data/site";
       </p>
       <h2>Contact</h2>
       <p>
-        Questions about this page or your data can go to{" "}
-        <a href={`mailto:${contact.email}`} class="text-link">{contact.email}</a>.
+        There is no verified direct contact route published on this site yet — see the <a
+          href="/contact"
+          class="text-link">contact page</a
+        > for current status.
       </p>
     </div>
   </section>

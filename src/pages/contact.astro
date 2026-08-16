@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { contact } from "../data/site";
 
 const reasonOptions = [
   { value: "ai-systems", label: "AI systems / operations" },
@@ -170,9 +169,10 @@ const breadcrumbLd = {
         </div>
 
         <p class="form-privacy">
-          Submitting this form sends your responses for review. No automated booking or scheduling
-          is attached to it, and there's no fixed response-time guarantee. See the
-          <a href="/privacy" class="text-link">privacy page</a> for how this data is handled.
+          This form isn't connected to a delivery service yet — see the status note for details.
+          Once it is, submissions will be for review only: no automated booking or scheduling, and
+          no fixed response-time guarantee. See the
+          <a href="/privacy" class="text-link">privacy page</a> for how data will be handled.
         </p>
 
         <button type="submit" class="btn btn--primary" id="contact-submit">Send inquiry</button>
@@ -182,8 +182,12 @@ const breadcrumbLd = {
 
       <aside class="contact-aside">
         <div class="card">
-          <p class="label-mono">Direct</p>
-          <p><a href={`mailto:${contact.email}`} class="text-link">{contact.email}</a></p>
+          <p class="label-mono">Status</p>
+          <p>
+            This form isn't connected to a delivery service yet, and there's no other verified
+            direct contact route published here. Once a delivery destination is confirmed, this page
+            will route to it — see docs/mark-2-release-audit.md for the exact blocker.
+          </p>
         </div>
         <div class="card">
           <p class="label-mono">Scope</p>
@@ -403,7 +407,7 @@ const breadcrumbLd = {
 
     if (!CONTACT_ENDPOINT) {
       setStatus(
-        "This form isn't connected to an inbox yet. Please email hello@alexandermathai.com directly and your message will be seen.",
+        "This form isn't connected to a delivery service yet, so this inquiry can't be sent from this page right now. There's no other verified contact route published here yet either — please check back soon.",
         "pending-integration",
       );
       return;
@@ -424,16 +428,10 @@ const breadcrumbLd = {
         );
         form.reset();
       } else {
-        setStatus(
-          "Something went wrong sending this. Please try again or email hello@alexandermathai.com directly.",
-          "error",
-        );
+        setStatus("Something went wrong sending this. Please try again shortly.", "error");
       }
     } catch {
-      setStatus(
-        "Something went wrong sending this. Please try again or email hello@alexandermathai.com directly.",
-        "error",
-      );
+      setStatus("Something went wrong sending this. Please try again shortly.", "error");
     } finally {
       submitBtn?.removeAttribute("disabled");
     }

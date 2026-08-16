@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import { tmiUrl } from "../../data/social";
+import { tmiUrl, tmiUrlVerified } from "../../data/social";
 
 const divisions = (await getCollection("ecosystem")).sort((a, b) => a.data.order - b.data.order);
 ---
@@ -11,7 +11,15 @@ const divisions = (await getCollection("ecosystem")).sort((a, b) => a.data.order
     <div class="ecosystem-map__node ecosystem-map__node--founder">Alexander Mathai</div>
     <div class="ecosystem-map__connector" aria-hidden="true"></div>
     <div class="ecosystem-map__node ecosystem-map__node--tmi">
-      <a href={tmiUrl} target="_blank" rel="noopener noreferrer">Texas Movement International</a>
+      {
+        tmiUrlVerified ? (
+          <a href={tmiUrl} target="_blank" rel="noopener noreferrer">
+            Texas Movement International
+          </a>
+        ) : (
+          "Texas Movement International"
+        )
+      }
     </div>
     <div class="ecosystem-map__connector ecosystem-map__connector--wide" aria-hidden="true"></div>
     <ul class="ecosystem-map__divisions">
