@@ -42,19 +42,19 @@ everywhere it was checked, but flagged as unverified rather than claimed.
 
 ## 4. Ecosystem / domain inventory
 
-| Division | Intended hostname | Current destination | Current status | Recommendation | Verification needed | Launch blocker |
-|---|---|---|---|---|---|---|
-| TMI Hub | texasmovement.com | Draft PR #1, not deployed | Building (per `ECOSYSTEM_MAP`) | **Building** | Hosting/DNS connection | No host connected; legal/org data TBD |
-| Founder | alexandermathai.com | Draft PR #2 (this repo) | Building | **Building** → Route once verified | Social URLs, photos, contact backend | See §7/§8 below |
-| Consulting | consulting.texasmovement.com | Draft PR #1, fully built, not deployed | Building | **Building** | `consulting@` inbox | Inbox unverified; testimonials form re-verification needed |
-| Media | media.texasmovement.com | Draft PR #2, fully built, not deployed | Building | **Building** (its own `/series` sub-route is `Route`-equivalent once live — see note) | `media@` inbox, resolve 2 conflicting legacy addresses | Inbox unverified |
-| HERO | hero.texasmovement.com | **No repo exists or is accessible** | N/A | **Reserve** | Locate/create repo, or confirm Shopify-only per manifest | No repo; also Shopify-platform per `@tmi/constants`, not an Astro target regardless |
-| Performance | performance.texasmovement.com | Draft PR #1, minimal shell, not deployed | Building | **Building** | Legal/performance-claims review (legacy content quarantined) | Review needed before any real copy ships |
-| Distribution | distribution.texasmovement.com | Draft PR #1, minimal shell, not deployed | Building | **Building** | Legal review (legacy IP-enforcement claims quarantined) | Review needed |
-| Social | social.texasmovement.com | Draft PR #1, minimal shell, not deployed | Building | **Building** | Legal review (legacy events/"Gather" framing quarantined) | Review needed |
-| FounderLink | founderlink.texasmovement.com | Draft PR #1, minimal shell, not deployed | Private | **Reserve** | Routing/referral mandate review | Private by design — no CTA, no intake |
-| Health | health.texasmovement.com | Draft PR #1, minimal shell, not deployed | Private | **Reserve** | Heavy legal/medical-compliance review (legacy medical claims + a live mailto quarantined) | Highest-sensitivity review in the ecosystem |
-| Reparations | reparations.texasmovement.com | Draft PR #1, minimal shell, not deployed | Private | **Reserve** | Legal/reputational review (legacy "reparative capital" framework quarantined) | Highest-sensitivity review, tied with Health |
+| Division     | Intended hostname              | Current destination                      | Current status                 | Recommendation                                                                        | Verification needed                                                                       | Launch blocker                                                                      |
+| ------------ | ------------------------------ | ---------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| TMI Hub      | texasmovement.com              | Draft PR #1, not deployed                | Building (per `ECOSYSTEM_MAP`) | **Building**                                                                          | Hosting/DNS connection                                                                    | No host connected; legal/org data TBD                                               |
+| Founder      | alexandermathai.com            | Draft PR #2 (this repo)                  | Building                       | **Building** → Route once verified                                                    | Social URLs, photos, contact backend                                                      | See §7/§8 below                                                                     |
+| Consulting   | consulting.texasmovement.com   | Draft PR #1, fully built, not deployed   | Building                       | **Building**                                                                          | `consulting@` inbox                                                                       | Inbox unverified; testimonials form re-verification needed                          |
+| Media        | media.texasmovement.com        | Draft PR #2, fully built, not deployed   | Building                       | **Building** (its own `/series` sub-route is `Route`-equivalent once live — see note) | `media@` inbox, resolve 2 conflicting legacy addresses                                    | Inbox unverified                                                                    |
+| HERO         | hero.texasmovement.com         | **No repo exists or is accessible**      | N/A                            | **Reserve**                                                                           | Locate/create repo, or confirm Shopify-only per manifest                                  | No repo; also Shopify-platform per `@tmi/constants`, not an Astro target regardless |
+| Performance  | performance.texasmovement.com  | Draft PR #1, minimal shell, not deployed | Building                       | **Building**                                                                          | Legal/performance-claims review (legacy content quarantined)                              | Review needed before any real copy ships                                            |
+| Distribution | distribution.texasmovement.com | Draft PR #1, minimal shell, not deployed | Building                       | **Building**                                                                          | Legal review (legacy IP-enforcement claims quarantined)                                   | Review needed                                                                       |
+| Social       | social.texasmovement.com       | Draft PR #1, minimal shell, not deployed | Building                       | **Building**                                                                          | Legal review (legacy events/"Gather" framing quarantined)                                 | Review needed                                                                       |
+| FounderLink  | founderlink.texasmovement.com  | Draft PR #1, minimal shell, not deployed | Private                        | **Reserve**                                                                           | Routing/referral mandate review                                                           | Private by design — no CTA, no intake                                               |
+| Health       | health.texasmovement.com       | Draft PR #1, minimal shell, not deployed | Private                        | **Reserve**                                                                           | Heavy legal/medical-compliance review (legacy medical claims + a live mailto quarantined) | Highest-sensitivity review in the ecosystem                                         |
+| Reparations  | reparations.texasmovement.com  | Draft PR #1, minimal shell, not deployed | Private                        | **Reserve**                                                                           | Legal/reputational review (legacy "reparative capital" framework quarantined)             | Highest-sensitivity review, tied with Health                                        |
 
 Note on Media's `/series`: it links to real, presumably-live external YouTube/
 social channels (not an internal, undeployed TMI subdomain), so once
@@ -73,6 +73,7 @@ one of them does go live.
 Every specific figure below came directly from the owner's own brief, used as
 given per governance §9 — none were independently verified, and none should
 be treated as confirmed by this audit:
+
 - TMI founded 2015
 - 2.1M+ cumulative media views
 - 150+ historical consulting clients, "including professional athletes and
@@ -174,6 +175,7 @@ gate be added here too — see `docs/ecosystem-governance.md`.
 ## 10. Launch risks, ranked
 
 **Blocker:**
+
 - No verified social/umbrella URLs anywhere in the ecosystem (all `false`).
 - No contact-form delivery backend.
 - No hosting/DNS connected for any of the 11 properties.
@@ -182,6 +184,7 @@ gate be added here too — see `docs/ecosystem-governance.md`.
   copy — current shells are safe as-is (nothing from that content shipped).
 
 **High:**
+
 - HERO has no accessible repo — decide whether it needs one or stays
   Shopify-only per the manifest.
 - Performance, Distribution, Social: legal review recommended before
@@ -192,6 +195,7 @@ gate be added here too — see `docs/ecosystem-governance.md`.
   unreconciled mismatch (see that repo's `docs/SITE_ARCHITECTURE.md`).
 
 **Medium:**
+
 - `@tmi/constants` remains vendored/frozen in the texasmovement.com family;
   the real `tmi-constants` package repo still doesn't exist (blocked earlier
   this session on a GitHub App permission error, unresolved).
@@ -199,6 +203,7 @@ gate be added here too — see `docs/ecosystem-governance.md`.
   manually this pass instead — see §7).
 
 **Low:**
+
 - Per-route OG images not yet built (single default used sitewide).
 - `founderSocialLinks`/ecosystem "Connect" sections currently render nothing
   visible, by design, until a link is verified — cosmetically sparse but not

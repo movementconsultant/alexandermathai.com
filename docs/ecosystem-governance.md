@@ -12,13 +12,13 @@ Every division in the ecosystem is exactly one of five statuses. These are the o
 (`src/content/ecosystem/*.md` frontmatter, `ECOSYSTEM_MAP` in texasmovement.com, and any vendored
 `@tmi/constants` registry).
 
-| Status      | Meaning                                                                                       | UI treatment                                                                 |
-| ----------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| **Live**    | Deployed to its real production hostname, reachable now, content is current and truthful.      | Full clickable node, external link if off the current domain.                |
-| **Route**   | No independent deployment (yet); the honest move is to route visitors to a live page elsewhere (usually `/contact` or a parent hub) rather than a dead end. | Clickable node, but the link goes to the routing target, not a bare domain.  |
-| **Building**| A real repo and active work exist, but nothing is deployed to a public hostname yet.           | Visible status badge with a concrete, truthful description of the work in progress. No link to an external URL. |
-| **Reserve** | A name/domain is reserved for future use; no repo or active build exists yet.                  | Inert text at most — no link, no claim of activity. May be omitted from the UI entirely. |
-| **Archive** | Was once live or building, has been intentionally retired or paused indefinitely.              | Clearly labeled as archived if shown at all; never presented alongside active divisions without that label. |
+| Status       | Meaning                                                                                                                                                     | UI treatment                                                                                                    |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Live**     | Deployed to its real production hostname, reachable now, content is current and truthful.                                                                   | Full clickable node, external link if off the current domain.                                                   |
+| **Route**    | No independent deployment (yet); the honest move is to route visitors to a live page elsewhere (usually `/contact` or a parent hub) rather than a dead end. | Clickable node, but the link goes to the routing target, not a bare domain.                                     |
+| **Building** | A real repo and active work exist, but nothing is deployed to a public hostname yet.                                                                        | Visible status badge with a concrete, truthful description of the work in progress. No link to an external URL. |
+| **Reserve**  | A name/domain is reserved for future use; no repo or active build exists yet.                                                                               | Inert text at most — no link, no claim of activity. May be omitted from the UI entirely.                        |
+| **Archive**  | Was once live or building, has been intentionally retired or paused indefinitely.                                                                           | Clearly labeled as archived if shown at all; never presented alongside active divisions without that label.     |
 
 This is a separate, deliberate layer from any legacy `PROPERTIES[key].status` values in a vendored
 constants package (e.g. `operating`, `available`, `publishing`, `in-development`,

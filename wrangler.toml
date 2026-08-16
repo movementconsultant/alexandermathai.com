@@ -1,0 +1,12 @@
+name = "alexandermathai-com"
+compatibility_date = "2026-08-01"
+
+# Static Astro build output. Point a Cloudflare Pages project at this repo
+# with build command `npm run build` and output directory `dist` — or run
+# `wrangler pages deploy dist` once a Cloudflare account/project is connected.
+#
+# NOTE: no Cloudflare account/project has been connected by this build (no
+# credentials were available in this environment). This file is scaffolding
+# so the repo is one-click-ready the moment someone with dashboard access
+# wires it up. See docs/mark-2-launch-plan.md for the deploy sequence.
+pages_build_output_dir = "dist"
