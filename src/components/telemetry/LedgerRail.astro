@@ -1,0 +1,91 @@
+---
+/**
+ * The Ledger rail. Renders up to 3 recent Substack article references
+ * (title, date, static link) or a static fallback link to the publication
+ * itself when the build-time fetch/parse fails or returns nothing safe to
+ * show. Never a title, excerpt, or any field beyond what
+ * docs/mark-13-telemetry-rails-implementation.md's guardrail table allows.
+ */
+import { getLedgerItems } from "../../lib/ledger";
+import TelemetryDisclosure from "./TelemetryDisclosure.astro";
+
+const result = await getLedgerItems();
+const PUBLICATION_URL = "https://texasmovement.substack.com";
+---
+
+<div class="ledger-rail">
+  {
+    result.status === "ok" ? (
+      <>
+        <ul class="ledger-list">
+          {result.items.map((item) => (
+            <li>
+              <a
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ledger-item-link"
+              >
+                {item.title}
+              </a>
+              {item.publishedAt && (
+                <time class="ledger-item-date" datetime={item.publishedAt}>
+                  {new Date(item.publishedAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </time>
+              )}
+            </li>
+          ))}
+        </ul>
+        <TelemetryDisclosure sourceLabel="Substack" />
+      </>
+    ) : (
+      <div class="ledger-fallback">
+        <p>
+          The Ledger's automated index isn't available for this build. Read the newsletter directly:
+        </p>
+        <a href={PUBLICATION_URL} target="_blank" rel="noopener noreferrer" class="text-link">
+          Texas Movement on Substack &rarr;
+        </a>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .ledger-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .ledger-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2);
+    padding-block: var(--space-2);
+    border-block-end: 1px solid var(--color-border-strong);
+  }
+
+  .ledger-item-link {
+    font-weight: 600;
+  }
+
+  .ledger-item-date {
+    font-size: 0.85rem;
+    color: var(--color-text-faint);
+    white-space: nowrap;
+  }
+
+  .ledger-fallback {
+    padding: var(--space-3);
+    border: 1px solid var(--color-border-strong);
+    border-radius: 0.5rem;
+    background: var(--color-bg-raised);
+  }
+</style>

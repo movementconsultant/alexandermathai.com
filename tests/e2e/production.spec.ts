@@ -61,6 +61,53 @@ test("sitemap-0.xml exists and includes the intended public pages", async ({ req
   expect(body).not.toContain("pages.dev");
 });
 
+test.describe("telemetry rails (Ledger, Live Systems) degrade safely", () => {
+  test("/ledger renders either the automated list or the static fallback link, never both, never neither", async ({
+    page,
+  }) => {
+    await page.goto("/ledger");
+    const list = page.locator(".ledger-list");
+    const fallback = page.locator(".ledger-fallback");
+    const listVisible = (await list.count()) > 0;
+    const fallbackVisible = (await fallback.count()) > 0;
+    expect(listVisible !== fallbackVisible, "/ledger must show exactly one of list/fallback").toBe(
+      true,
+    );
+    if (listVisible) {
+      await expect(page.locator(".telemetry-disclosure")).toBeVisible();
+    } else {
+      await expect(fallback.locator('a[href="https://texasmovement.substack.com"]')).toBeVisible();
+    }
+  });
+
+  test("/systems renders either the automated list or the static fallback link, never both, never neither", async ({
+    page,
+  }) => {
+    await page.goto("/systems");
+    const list = page.locator(".live-systems-list");
+    const fallback = page.locator(".live-systems-fallback");
+    const listVisible = (await list.count()) > 0;
+    const fallbackVisible = (await fallback.count()) > 0;
+    expect(listVisible !== fallbackVisible, "/systems must show exactly one of list/fallback").toBe(
+      true,
+    );
+    if (listVisible) {
+      await expect(page.locator(".telemetry-disclosure")).toBeVisible();
+      // Ticker Tape Guardrails: a commit message is at most 50 chars plus an
+      // ellipsis — this would catch a regression that started rendering a
+      // full commit body.
+      const messages = await page.locator(".live-systems-message").allTextContents();
+      for (const message of messages) {
+        expect(message.length, `commit message too long: "${message}"`).toBeLessThanOrEqual(50);
+      }
+    } else {
+      await expect(
+        fallback.locator('a[href="https://github.com/movementconsultant"]'),
+      ).toBeVisible();
+    }
+  });
+});
+
 test.describe("/contact stays inert with valid input", () => {
   test("submitting valid fields causes no navigation, no network request, and no success message", async ({
     page,

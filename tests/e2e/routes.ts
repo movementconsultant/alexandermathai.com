@@ -1,4 +1,4 @@
-/** The 17 production HTML routes this site builds. Kept as one shared list
+/** The production HTML routes this site builds. Kept as one shared list
  * so preview.spec.ts and production.spec.ts test the same surface — update
  * here if a route is added or removed. */
 export const ROUTES = [
@@ -15,6 +15,8 @@ export const ROUTES = [
   "/notes/building-this-site-in-the-open",
   "/notes/ownership-beats-dependency",
   "/notes/performance-is-a-systems-problem",
+  "/ledger",
+  "/systems",
   "/about",
   "/contact",
   "/privacy",
