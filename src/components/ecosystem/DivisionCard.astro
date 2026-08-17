@@ -1,0 +1,85 @@
+---
+import type { CollectionEntry } from "astro:content";
+import StatusBadge from "../ui/StatusBadge.astro";
+
+interface Props {
+  division: CollectionEntry<"ecosystem">;
+}
+
+const { division } = Astro.props;
+const { data, id } = division;
+
+const tone =
+  data.status === "operating" || data.status === "available" || data.status === "publishing"
+    ? "active"
+    : data.status === "select-engagements"
+      ? "progress"
+      : "neutral";
+---
+
+<article class="card division-card" id={id}>
+  <div class="division-card__head">
+    <h3>{data.name}</h3>
+    <StatusBadge label={data.statusLabel} tone={tone} />
+  </div>
+  <p class="division-card__mandate">{data.mandate}</p>
+  <p class="division-card__relationship">{data.relationshipToTmi}</p>
+
+  {
+    /* Channel URLs are intentionally not rendered as live links: this
+       content collection doesn't track per-item verification, and the
+       equivalent entries in src/data/social.ts are all `verified: false` in
+       this build (no general web egress was available to confirm any of
+       them). Platform names render as plain text instead of unconfirmed
+       outbound links — see docs/mark-2-release-audit.md and
+       docs/ecosystem-governance.md for how to safely re-enable real links
+       once a platform/handle is verified. */
+  }
+  {
+    data.channels.length > 0 && (
+      <p class="division-card__channels-note">
+        Also publishing on {data.channels.map((ch) => ch.platform).join(", ")} (links pending
+        verification)
+      </p>
+    )
+  }
+
+  <a href={data.internalRoute ?? "/contact"} class="text-link division-card__cta">
+    {data.internalRoute === "/contact" ? "Start a conversation" : "Learn more"} &rarr;
+  </a>
+</article>
+
+<style>
+  .division-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    scroll-margin-top: 6rem;
+  }
+
+  .division-card__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .division-card__mandate {
+    color: var(--color-text);
+  }
+
+  .division-card__relationship {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+
+  .division-card__channels-note {
+    font-size: 0.85rem;
+    color: var(--color-text-faint);
+  }
+
+  .division-card__cta {
+    margin-block-start: 0.4rem;
+  }
+</style>

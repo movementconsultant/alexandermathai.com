@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import LiveSystemsRail from "../components/telemetry/LiveSystemsRail.astro";
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://alexandermathai.com/" },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Live Systems",
+      item: "https://alexandermathai.com/systems",
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="Live Systems — Alexander Mathai"
+  description="An automatically retrieved index of recent public GitHub activity — repository, commit summary, and date only."
+  structuredData={[breadcrumbLd]}
+>
+  <section class="section section--tight">
+    <div class="wrap prose">
+      <p class="eyebrow">Live Systems</p>
+      <h1>Proof of work, indexed automatically.</h1>
+      <p class="lede">
+        A build-time index of recent public GitHub activity — repository, a short commit summary,
+        and date only. This list is retrieved automatically and is not individually reviewed before
+        it appears; no diff, commit body, or pull-request description is ever shown here.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <LiveSystemsRail />
+    </div>
+  </section>
+</BaseLayout>

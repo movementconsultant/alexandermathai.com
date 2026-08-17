@@ -1,0 +1,517 @@
+{
+  "$schema": "./docs/claims-governance.md",
+  "generated": "2026-08-16",
+  "generatedBy": "Mark 2 claims-review pass (see docs/CLAIMS_REVIEW.md)",
+  "criterion": "ownerDecision may be \"documented\" only when the claim is directly verifiable by inspecting this repository itself (e.g. \"this site's own architecture\"). Every business, biography, timeline, product, client, or metric fact about the founder or TMI is \"pending\" until the owner explicitly approves it — being present in a data file is not evidence, and no claim here has been independently verified by this build environment (no general web access).",
+  "claims": [
+    {
+      "id": "founder-title-header",
+      "exactText": "Founder & President, Texas Movement International",
+      "routes": [
+        "/",
+        "/work",
+        "/work/[slug]",
+        "/thesis",
+        "/ecosystem",
+        "/notes",
+        "/notes/[slug]",
+        "/about",
+        "/contact",
+        "/privacy",
+        "/404"
+      ],
+      "category": "biography",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/components/site/Header.astro:16 (visible context line, every page)",
+        "src/data/site.ts:47 (personSchema.jobTitle, emitted in Person JSON-LD via src/layouts/BaseLayout.astro:44 on every page)"
+      ]
+    },
+    {
+      "id": "founder-title-footer",
+      "exactText": "Founder & President of Texas Movement International, the umbrella for the ecosystem below.",
+      "routes": [
+        "/",
+        "/work",
+        "/work/[slug]",
+        "/thesis",
+        "/ecosystem",
+        "/notes",
+        "/notes/[slug]",
+        "/about",
+        "/contact",
+        "/privacy",
+        "/404"
+      ],
+      "category": "biography",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/components/site/Footer.astro:22-33"]
+    },
+    {
+      "id": "region-greater-chicago-area",
+      "exactText": "Greater Chicago Area",
+      "routes": [
+        "/",
+        "/work",
+        "/work/[slug]",
+        "/thesis",
+        "/ecosystem",
+        "/notes",
+        "/notes/[slug]",
+        "/about",
+        "/contact",
+        "/privacy",
+        "/404"
+      ],
+      "category": "biography",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/data/site.ts:15 (site.region)",
+        "src/components/site/Footer.astro:34 (every page)",
+        "src/pages/about.astro:94 (rendered a second time on this route)"
+      ]
+    },
+    {
+      "id": "person-jsonld-description",
+      "exactText": "Alexander Mathai builds owned systems — brand architecture, AI operations, web infrastructure, media, and commerce — for founders, brands, and performance-minded organizations. Founder & President of Texas Movement International since 2015.",
+      "routes": [
+        "/ (also literal <meta name=\"description\">, og:description, twitter:description)",
+        "/work",
+        "/work/[slug]",
+        "/thesis",
+        "/ecosystem",
+        "/notes",
+        "/notes/[slug]",
+        "/about",
+        "/contact",
+        "/privacy",
+        "/404",
+        "/notes.xml (RSS <description>)"
+      ],
+      "category": "biography",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/data/site.ts:19-24 (defaultSeo.description)",
+        "src/data/site.ts:50 (personSchema.description = defaultSeo.description, emitted in Person JSON-LD on every page)",
+        "src/pages/notes.xml.js:12"
+      ]
+    },
+    {
+      "id": "proof-2015-founding",
+      "exactText": "2015 / Founded Texas Movement International / Founder & President, operating continuously since founding.",
+      "routes": ["/"],
+      "category": "timeline",
+      "qualification": "founder-reported",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/data/proof.ts:16-21", "src/components/home/ProofRail.astro"]
+    },
+    {
+      "id": "proof-2.1m-views",
+      "exactText": "2.1M+ / Media views across platforms / Texas Movement Media, cumulative across YouTube, Instagram, and TikTok.",
+      "routes": ["/"],
+      "category": "metric",
+      "qualification": "founder-reported",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/data/proof.ts:22-27", "src/components/home/ProofRail.astro"]
+    },
+    {
+      "id": "proof-150-clients",
+      "exactText": "150+ / Consulting clients, historically / Includes professional athletes and Fortune 500 executives, across the full consulting practice to date.",
+      "routes": ["/"],
+      "category": "client-category",
+      "qualification": "founder-reported",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/data/proof.ts:28-34", "src/components/home/ProofRail.astro"]
+    },
+    {
+      "id": "proof-35-hero-products",
+      "exactText": "35+ / HERO products shipped / Three footwear and apparel generations across fulfillment and ecommerce infrastructure.",
+      "routes": ["/"],
+      "category": "product-history",
+      "qualification": "founder-reported",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/data/proof.ts:35-41", "src/components/home/ProofRail.astro"]
+    },
+    {
+      "id": "proof-engineering-systems-builder",
+      "exactText": "1 / Engineering-trained systems builder / Civil engineering education informs a first-principles, load-path approach to every system built.",
+      "routes": ["/"],
+      "category": "biography",
+      "qualification": "documented",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/data/proof.ts:42-48", "src/components/home/ProofRail.astro"],
+      "notes": "Source data labels this evidenceLevel: 'documented', but no repository file substantiates the underlying educational claim -- this does not meet the strict 'directly verifiable from this repository' bar this registry otherwise reserves for the one self-evident technical claim (tmi-digital-ecosystem-self-reference). Flagged, not corrected, in this pass."
+    },
+    {
+      "id": "about-lede-founder-since-2015",
+      "exactText": "Founder-operator and systems builder. Founder & President of Texas Movement International since 2015, working across consulting, media, product, and performance — with an engineering-trained, first-principles approach to all of it.",
+      "routes": ["/about"],
+      "category": "biography",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/about.astro:89-93"]
+    },
+    {
+      "id": "about-evidence-founder-title",
+      "exactText": "Founder & President, Texas Movement International — since 2015",
+      "routes": ["/about"],
+      "category": "biography",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/about.astro:56"]
+    },
+    {
+      "id": "about-evidence-engineering",
+      "exactText": "Civil engineering education, first-principles systems orientation",
+      "routes": ["/about"],
+      "category": "biography",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/about.astro:57"]
+    },
+    {
+      "id": "about-evidence-media-views",
+      "exactText": "Texas Movement Media: 2.1M+ views across platforms",
+      "routes": ["/about"],
+      "category": "metric",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/about.astro:58"]
+    },
+    {
+      "id": "about-evidence-consulting-clients",
+      "exactText": "Consulting practice: 150+ clients historically, including professional athletes and Fortune 500 executives",
+      "routes": ["/about"],
+      "category": "client-category",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/about.astro:59"]
+    },
+    {
+      "id": "about-evidence-sweat",
+      "exactText": "SWEAT Boxing and Training: zero to 140 members in nine months, 85+ retained beyond three months",
+      "routes": ["/about"],
+      "category": "metric",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/about.astro:60"]
+    },
+    {
+      "id": "about-evidence-hero",
+      "exactText": "HERO Footwear: three product generations, 35+ products",
+      "routes": ["/about"],
+      "category": "product-history",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/about.astro:61"]
+    },
+    {
+      "id": "about-timeline-2006-2012-engineering-education",
+      "exactText": "2006–2012 / Engineering education / Civil engineering training — the first-principles, load-path orientation that still shapes how systems get diagnosed and built.",
+      "routes": ["/about"],
+      "category": "timeline",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/about.astro:11-14"]
+    },
+    {
+      "id": "about-timeline-2012-2013-infrastructure",
+      "exactText": "2012–2013 / Civil engineering / infrastructure experience / Applied engineering work in infrastructure, before the shift toward performance, business, and systems work.",
+      "routes": ["/about"],
+      "category": "timeline",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/about.astro:16-19"]
+    },
+    {
+      "id": "about-timeline-2013-2015-sweat",
+      "exactText": "2013–2015 / SWEAT operational growth / Built the membership and retention system behind SWEAT Boxing and Training — zero to 140 members in nine months.",
+      "routes": ["/about"],
+      "category": "timeline",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/about.astro:21-24"]
+    },
+    {
+      "id": "about-timeline-2015-tmi-formation",
+      "exactText": "2015–present / TMI formation and evolution / Founded Texas Movement International; has served as Founder & President since.",
+      "routes": ["/about"],
+      "category": "timeline",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/about.astro:26-29"]
+    },
+    {
+      "id": "about-timeline-2018-media",
+      "exactText": "2018–present / Texas Movement Media / Built the independent long-form storytelling and distribution system now at 2.1M+ cumulative views.",
+      "routes": ["/about"],
+      "category": "timeline",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/about.astro:31-34"]
+    },
+    {
+      "id": "about-timeline-2023-hero",
+      "exactText": "2023–present / HERO leadership / Leading product, brand, and commerce infrastructure for HERO Footwear & Performance.",
+      "routes": ["/about"],
+      "category": "timeline",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/about.astro:36-39"]
+    },
+    {
+      "id": "about-timeline-2023-ai",
+      "exactText": "2023–present / AI systems translation / Applying AI directly inside operating systems for consulting clients and TMI's own ecosystem.",
+      "routes": ["/about"],
+      "category": "timeline",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/about.astro:41-44"]
+    },
+    {
+      "id": "about-tmi-relationship",
+      "exactText": "Alexander is the founder and individual point of view behind Texas Movement International. This site is his — the umbrella organization, Texas Movement International, is where the divisions he's built live and operate at their own pace.",
+      "routes": ["/about"],
+      "category": "biography",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/about.astro:157-169"]
+    },
+    {
+      "id": "ecosystem-lede-founded-2015",
+      "exactText": "Texas Movement International is the umbrella Alexander Mathai founded in 2015. Everything below sits under it — at different stages of maturity, on purpose.",
+      "routes": ["/ecosystem"],
+      "category": "timeline",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/pages/ecosystem.astro:70-72"]
+    },
+    {
+      "id": "ecosystem-jsonld-foundingdate",
+      "exactText": "\"foundingDate\":\"2015\"",
+      "routes": ["/ecosystem"],
+      "category": "timeline",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/data/site.ts:61 (organizationSchema.foundingDate)",
+        "src/pages/ecosystem.astro:32"
+      ]
+    },
+    {
+      "id": "division-consulting-mandate",
+      "exactText": "Texas Movement Consulting / AI strategy, workflow architecture, and embedded advisory for founders and operators. / TMI's primary consulting practice — Alexander Mathai's direct advisory work, operating under the Texas Movement International umbrella. / Select engagements",
+      "routes": ["/ecosystem"],
+      "category": "client-category",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/content/ecosystem/texas-movement-consulting.md (frontmatter: mandate, relationshipToTmi, statusLabel)",
+        "src/components/ecosystem/DivisionCard.astro"
+      ]
+    },
+    {
+      "id": "division-media-mandate",
+      "exactText": "Texas Movement Media / Independent long-form storytelling at the intersection of sports, performance science, founders, and culture. / TMI's editorial and distribution arm — content produced and distributed under the Texas Movement Media name. / Publishing on social channels · site in development",
+      "routes": ["/ecosystem"],
+      "category": "other",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/content/ecosystem/texas-movement-media.md (frontmatter)",
+        "src/components/ecosystem/DivisionCard.astro"
+      ]
+    },
+    {
+      "id": "division-hero-mandate",
+      "exactText": "HERO Footwear & Performance / Biomechanics-informed footwear and apparel, performance culture, and product storytelling. / TMI's product and commerce arm — footwear, apparel, and the infrastructure behind them. / Building",
+      "routes": ["/ecosystem"],
+      "category": "product-history",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/content/ecosystem/hero-footwear.md (frontmatter)",
+        "src/components/ecosystem/DivisionCard.astro"
+      ]
+    },
+    {
+      "id": "division-performance-mandate",
+      "exactText": "Texas Movement Performance / Movement, biomechanics, performance science, and training-systems thinking. / TMI's performance-science and training-systems research arm. / In development",
+      "routes": ["/ecosystem"],
+      "category": "other",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/content/ecosystem/texas-movement-performance.md (frontmatter)",
+        "src/components/ecosystem/DivisionCard.astro"
+      ]
+    },
+    {
+      "id": "division-social-mandate",
+      "exactText": "Texas Movement Social / Gather™ / Ceremony, weddings, births, engagements, and social infrastructure, approached with data, safety, and inclusion in mind. / An early-stage TMI initiative exploring social and ceremonial infrastructure. / In development — exploration stage",
+      "routes": ["/ecosystem"],
+      "category": "other",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/content/ecosystem/texas-movement-social.md (frontmatter)",
+        "src/components/ecosystem/DivisionCard.astro"
+      ],
+      "notes": "Includes a trademark symbol (™) on \"Gather\" -- an implicit trademark-registration assertion, not independently verified by this build."
+    },
+    {
+      "id": "division-founderlink-mandate",
+      "exactText": "FounderLink / An early-stage Texas Movement International initiative, not yet publicly described in detail. / An early-stage TMI initiative, listed here for transparency about the full scope of the ecosystem. / In development",
+      "routes": ["/ecosystem"],
+      "category": "other",
+      "qualification": "none",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/content/ecosystem/founderlink.md (frontmatter)",
+        "src/components/ecosystem/DivisionCard.astro"
+      ]
+    },
+    {
+      "id": "work-hero-summary-outcome",
+      "exactText": "Three generations of biomechanics-informed footwear and apparel, and the commerce infrastructure to fulfill them. / 35+ products shipped across three footwear and apparel generations.",
+      "routes": ["/", "/work", "/work/hero-footwear-product-system"],
+      "category": "product-history",
+      "qualification": "founder-reported",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/content/work/hero-footwear-product-system.md (summary, outcome frontmatter)",
+        "src/components/work/SystemBriefCard.astro"
+      ]
+    },
+    {
+      "id": "work-hero-deliverables",
+      "exactText": "Product development across three generations / 35+ SKUs brought to market / Fulfillment-partner and ecommerce infrastructure",
+      "routes": ["/work/hero-footwear-product-system"],
+      "category": "product-history",
+      "qualification": "founder-reported",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/content/work/hero-footwear-product-system.md (deliverables frontmatter)",
+        "src/pages/work/[slug].astro"
+      ]
+    },
+    {
+      "id": "work-sweat-summary-outcome",
+      "exactText": "A membership and walk-in conversion system that took SWEAT Boxing and Training from zero to 140 members in nine months. / Zero to 140 members in nine months; 85+ members retained beyond three months; approximately 8 of 10 walk-ins closed.",
+      "routes": ["/work", "/work/sweat-boxing-growth-system"],
+      "category": "metric",
+      "qualification": "founder-reported",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/content/work/sweat-boxing-growth-system.md (summary, outcome frontmatter)"
+      ],
+      "notes": "Not featured on the homepage (featured: false) -- appears only on /work and its own detail page."
+    },
+    {
+      "id": "work-sweat-body-qualifier",
+      "exactText": "This is the earliest system-building work in the founder's history — historical context for the operating thesis, not a current, active offering. [...] The membership and retention figures are founder-reported historical totals from that period.",
+      "routes": ["/work/sweat-boxing-growth-system"],
+      "category": "timeline",
+      "qualification": "founder-reported",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/content/work/sweat-boxing-growth-system.md (markdown body)"]
+    },
+    {
+      "id": "work-consulting-summary-outcome",
+      "exactText": "Turning founder and operator expertise into repeatable, documented operating systems across 150+ engagements to date. / 150+ clients historically, including professional athletes and Fortune 500 executives.",
+      "routes": ["/", "/work", "/work/texas-movement-consulting-systems"],
+      "category": "client-category",
+      "qualification": "founder-reported",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/content/work/texas-movement-consulting-systems.md (summary, outcome frontmatter)"
+      ]
+    },
+    {
+      "id": "work-consulting-body-qualifier",
+      "exactText": "This is reported by the founder as a historical total across the practice's full history, not a claim about any single current engagement, active roster, or specific client outcome — no client names or case-level results are published here without confirmed permission.",
+      "routes": ["/work/texas-movement-consulting-systems"],
+      "category": "client-category",
+      "qualification": "founder-reported",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": ["src/content/work/texas-movement-consulting-systems.md (markdown body)"]
+    },
+    {
+      "id": "work-media-summary-outcome",
+      "exactText": "A long-form storytelling and distribution system spanning YouTube, Instagram, and TikTok, at the intersection of sports, performance, founders, and culture. / 2.1M+ views across platforms to date.",
+      "routes": ["/", "/work", "/work/texas-movement-media-distribution-system"],
+      "category": "metric",
+      "qualification": "founder-reported",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/content/work/texas-movement-media-distribution-system.md (summary, outcome frontmatter)"
+      ]
+    },
+    {
+      "id": "work-media-body-qualifier",
+      "exactText": "The 2.1M+ view figure is a cumulative, founder-reported total across platforms to date, not a single-video or single-period metric.",
+      "routes": ["/work/texas-movement-media-distribution-system"],
+      "category": "metric",
+      "qualification": "founder-reported",
+      "evidenceStatus": "none-found",
+      "ownerDecision": "pending",
+      "sourceLocations": [
+        "src/content/work/texas-movement-media-distribution-system.md (markdown body)"
+      ]
+    },
+    {
+      "id": "work-tmi-ecosystem-self-reference",
+      "exactText": "A founder control tower built to make Alexander Mathai's work, methodology, and the Texas Movement International ecosystem legible in one place. / This site — the architecture described here is the one currently running it.",
+      "routes": ["/", "/work", "/work/tmi-digital-ecosystem"],
+      "category": "technical",
+      "qualification": "documented",
+      "evidenceStatus": "self-verifiable-in-this-repository",
+      "ownerDecision": "documented",
+      "sourceLocations": ["src/content/work/tmi-digital-ecosystem.md"],
+      "notes": "The ONE claim in this registry marked ownerDecision: 'documented' rather than 'pending' -- criterion: it asserts only that this repository's own architecture builds the site it describes, which is directly and mechanically verifiable by reading this repository. It asserts nothing about the founder's history, business metrics, or any external fact."
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import LedgerRail from "../components/telemetry/LedgerRail.astro";
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://alexandermathai.com/" },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "The Ledger",
+      item: "https://alexandermathai.com/ledger",
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="The Ledger — Alexander Mathai"
+  description="An automatically retrieved index of recent Texas Movement Substack publications — titles, dates, and direct links only."
+  structuredData={[breadcrumbLd]}
+>
+  <section class="section section--tight">
+    <div class="wrap prose">
+      <p class="eyebrow">The Ledger</p>
+      <h1>Recent writing, indexed automatically.</h1>
+      <p class="lede">
+        A build-time index of the Texas Movement Substack — the three most recent entries, title and
+        date only. This list is retrieved automatically and is not individually reviewed before it
+        appears; read the full source for context on any entry.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <LedgerRail />
+    </div>
+  </section>
+</BaseLayout>

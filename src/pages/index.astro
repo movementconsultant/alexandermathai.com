@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/home/Hero.astro";
+import ProofRail from "../components/home/ProofRail.astro";
+import ProblemFraming from "../components/home/ProblemFraming.astro";
+import Capabilities from "../components/home/Capabilities.astro";
+import SelectedWork from "../components/home/SelectedWork.astro";
+import ThesisTeaser from "../components/home/ThesisTeaser.astro";
+import EcosystemPreview from "../components/home/EcosystemPreview.astro";
+import FieldNotes from "../components/home/FieldNotes.astro";
+import ClosingCta from "../components/home/ClosingCta.astro";
+import { defaultSeo } from "../data/site";
+---
+
+<BaseLayout title={defaultSeo.title} description={defaultSeo.description}>
+  <Hero />
+  <ProofRail />
+  <ProblemFraming />
+  <Capabilities />
+  <SelectedWork />
+  <ThesisTeaser />
+  <EcosystemPreview />
+  <FieldNotes />
+  <ClosingCta />
+</BaseLayout>

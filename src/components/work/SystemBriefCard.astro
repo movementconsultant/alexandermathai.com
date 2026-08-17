@@ -1,0 +1,82 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"work">;
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+
+const divisionLabel: Record<string, string> = {
+  "tmi-ecosystem": "TMI Ecosystem",
+  "texas-movement-consulting": "Texas Movement Consulting",
+  "texas-movement-media": "Texas Movement Media",
+  "hero-footwear": "HERO Footwear & Performance",
+  "texas-movement-performance": "Texas Movement Performance",
+  sweat: "SWEAT Boxing and Training",
+  independent: "Independent",
+};
+
+// Evidence level shapes phrasing, never renders as a raw label (brief §6).
+const outcomeCaveat =
+  data.evidenceLevel === "reported-by-founder" ? "As reported by the founder." : "";
+---
+
+<article class="card system-brief" data-work-category={data.categories.join(",")}>
+  <p class="label-mono">{divisionLabel[data.division]}</p>
+  <h3><a href={`/work/${entry.id}`}>{data.title}</a></h3>
+  <p class="system-brief__summary">{data.summary}</p>
+
+  {
+    data.outcome && (
+      <div class="system-brief__outcome">
+        <p class="label-mono">Outcome</p>
+        <p>{data.outcome}</p>
+        {outcomeCaveat && <p class="system-brief__caveat">{outcomeCaveat}</p>}
+      </div>
+    )
+  }
+
+  <a href={`/work/${entry.id}`} class="text-link system-brief__cta">Read the system brief &rarr;</a>
+</article>
+
+<style>
+  .system-brief {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .system-brief h3 {
+    font-size: 1.2rem;
+  }
+
+  .system-brief h3 a {
+    text-decoration: none;
+  }
+
+  .system-brief h3 a:hover {
+    color: var(--color-accent);
+  }
+
+  .system-brief__summary {
+    color: var(--color-text-muted);
+  }
+
+  .system-brief__outcome {
+    margin-block-start: var(--space-2);
+    padding-top: var(--space-2);
+    border-top: var(--border-hairline);
+  }
+
+  .system-brief__caveat {
+    color: var(--color-text-faint);
+    font-size: 0.8rem;
+    margin-block-start: 0.25rem;
+  }
+
+  .system-brief__cta {
+    margin-block-start: var(--space-2);
+  }
+</style>

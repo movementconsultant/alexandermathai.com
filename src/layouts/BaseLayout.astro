@@ -1,0 +1,113 @@
+---
+import "../styles/global.css";
+import Header from "../components/site/Header.astro";
+import Footer from "../components/site/Footer.astro";
+import { site, defaultSeo, personSchema } from "../data/site";
+
+/**
+ * Preview/production gate, matching the convention used across every other
+ * repo in this ecosystem: PUBLIC_PREVIEW defaults to true (safe) so a
+ * missing or misconfigured env var never accidentally ships an indexable
+ * build. Set PUBLIC_PREVIEW=false explicitly for a real production build.
+ * This was previously missing from this repo — noindex defaulted to
+ * `false`, meaning every page except /404 shipped indexable by default.
+ * See docs/mark-2-release-audit.md.
+ */
+const PUBLIC_PREVIEW = import.meta.env.PUBLIC_PREVIEW !== "false";
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  noindex?: boolean;
+  structuredData?: Record<string, unknown>[];
+  bodyClass?: string;
+}
+
+const {
+  title,
+  description = defaultSeo.description,
+  ogImage = defaultSeo.ogImage,
+  noindex = PUBLIC_PREVIEW,
+  structuredData = [],
+  bodyClass = "",
+} = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, site.url).toString();
+const ogImageUrl = new URL(ogImage, site.url).toString();
+
+const personLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: personSchema.name,
+  url: personSchema.url,
+  jobTitle: personSchema.jobTitle,
+  description: personSchema.description,
+  affiliation: {
+    "@type": "Organization",
+    name: personSchema.worksFor,
+  },
+};
+
+const allStructuredData = [personLd, ...structuredData];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${site.name} — Notes`}
+      href="/notes.xml"
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    {
+      allStructuredData.map((entry) => (
+        <script type="application/ld+json" is:inline set:html={JSON.stringify(entry)} />
+      ))
+    }
+
+    <script is:inline>
+      // Anti-flash theme init: runs before first paint, before global.css
+      // finishes applying. Mirrors the persistence logic in ThemeToggle.astro.
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          if (stored === "dark" || stored === "light") {
+            document.documentElement.setAttribute("data-theme", stored);
+          }
+        } catch (e) {
+          /* no-op: falls back to prefers-color-scheme */
+        }
+      })();
+    </script>
+  </head>
+  <body class={bodyClass}>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <Header />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

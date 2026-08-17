@@ -1,0 +1,116 @@
+/**
+ * Design tokens — "engineering editorial meets performance culture."
+ * Dark-first, with an equal-quality light theme. Respects
+ * prefers-color-scheme and a persistent [data-theme] override (see
+ * src/components/ui/ThemeToggle.astro and the inline anti-flash script in
+ * BaseLayout.astro).
+ */
+
+:root {
+  /* ---- Color: dark (default) ---- */
+  --color-bg: #0b0c0d;
+  --color-bg-raised: #141517;
+  --color-surface: #1b1d20;
+  --color-graphite: #232629;
+  --color-border: #2c2f33;
+  --color-border-strong: #3d4147;
+  --color-text: #eeece6;
+  --color-text-muted: #a6a9ad;
+  --color-text-faint: #82868b;
+  --color-accent: #ff5a1f; /* signal orange — used sparingly */
+  --color-accent-text: #100600;
+  --color-focus: #ff5a1f;
+  --color-positive: #7cc68a;
+  --color-caution: #e8b64a;
+
+  color-scheme: dark;
+
+  /* ---- Type ---- */
+  --font-display: "Iowan Old Style", "Sitka Text", Georgia, "Times New Roman", ui-serif, serif;
+  --font-sans:
+    "InterVariable", Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", monospace;
+
+  /* ---- Scale ---- */
+  --measure: 38rem;
+  --measure-wide: 68rem;
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.25rem;
+  --space-5: 3.5rem;
+  --space-6: 5.5rem;
+  --space-7: 8rem;
+
+  --radius-sm: 3px;
+  --radius-md: 6px;
+
+  --border-hairline: 1px solid var(--color-border);
+
+  --ease-signal: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* System preference, when no explicit toggle choice has been made */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --color-bg: #f6f4ee;
+    --color-bg-raised: #efece3;
+    --color-surface: #e9e5db;
+    --color-graphite: #dedad0;
+    --color-border: #d3cfc3;
+    --color-border-strong: #b9b3a3;
+    --color-text: #17181a;
+    --color-text-muted: #4d4f52;
+    --color-text-faint: #5a5c5e; /* darkened from #6c6e70 — that failed WCAG AA (4.33:1) against --color-bg-raised; this reaches 5.68:1. See docs/mark-2-release-audit.md. */
+    --color-accent: #ad350e;
+    --color-accent-text: #fffaf4;
+    --color-focus: #ad350e;
+    --color-positive: #256a3c; /* darkened from #2f7a41 — that failed WCAG AA (4.46:1) on the "Publishing" status badge; this reaches 5.55:1. See docs/mark-2-release-audit.md. */
+    --color-caution: #8a6415;
+    color-scheme: light;
+  }
+}
+
+/* Explicit user toggle wins in both directions */
+:root[data-theme="light"] {
+  --color-bg: #f6f4ee;
+  --color-bg-raised: #efece3;
+  --color-surface: #e9e5db;
+  --color-graphite: #dedad0;
+  --color-border: #d3cfc3;
+  --color-border-strong: #b9b3a3;
+  --color-text: #17181a;
+  --color-text-muted: #4d4f52;
+  --color-text-faint: #6c6e70;
+  --color-accent: #ad350e;
+  --color-accent-text: #fffaf4;
+  --color-focus: #ad350e;
+  --color-positive: #256a3c; /* darkened from #2f7a41 — that failed WCAG AA (4.46:1) on the "Publishing" status badge; this reaches 5.55:1. See docs/mark-2-release-audit.md. */
+  --color-caution: #8a6415;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --color-bg: #0b0c0d;
+  --color-bg-raised: #141517;
+  --color-surface: #1b1d20;
+  --color-graphite: #232629;
+  --color-border: #2c2f33;
+  --color-border-strong: #3d4147;
+  --color-text: #eeece6;
+  --color-text-muted: #a6a9ad;
+  --color-text-faint: #82868b;
+  --color-accent: #ff5a1f;
+  --color-accent-text: #100600;
+  --color-focus: #ff5a1f;
+  --color-positive: #7cc68a;
+  --color-caution: #e8b64a;
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ease-signal: linear;
+  }
+}
