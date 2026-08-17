@@ -9,6 +9,7 @@ export const primaryNav: NavItem[] = [
   { label: "Operating Thesis", href: "/thesis" },
   { label: "Ecosystem", href: "/ecosystem" },
   { label: "Notes", href: "/notes" },
+  { label: "Artifacts", href: "/artifacts" },
   { label: "The Ledger", href: "/ledger" },
   { label: "Live Systems", href: "/systems" },
   { label: "About", href: "/about" },

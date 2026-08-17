@@ -1,0 +1,162 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ArtifactCard from "../../components/content/ArtifactCard.astro";
+import Button from "../../components/ui/Button.astro";
+import { formatDate, readingTime } from "../../utils/reading-time";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("artifacts", ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"artifacts">;
+}
+
+const { entry } = Astro.props;
+const { data, body } = entry;
+const { Content } = await render(entry);
+
+const allArtifacts = await getCollection("artifacts", ({ data: d }) => !d.draft);
+const related = allArtifacts
+  .filter((a) => a.id !== entry.id && a.data.tags.some((t) => data.tags.includes(t)))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 2);
+
+const articleLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: data.title,
+  description: data.summary,
+  datePublished: data.date.toISOString(),
+  dateModified: (data.updatedDate ?? data.date).toISOString(),
+  author: { "@type": "Person", name: "Alexander Mathai" },
+};
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://alexandermathai.com/" },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Artifacts",
+      item: "https://alexandermathai.com/artifacts",
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: data.title,
+      item: `https://alexandermathai.com/artifacts/${entry.id}`,
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={`${data.title} — Alexander Mathai`}
+  description={data.summary}
+  structuredData={[articleLd, breadcrumbLd]}
+>
+  <article class="section section--tight">
+    <div class="wrap prose artifact-detail__header">
+      <p class="eyebrow">Artifact</p>
+      <h1>{data.title}</h1>
+      <p class="lede">{data.summary}</p>
+      <p class="label-mono">
+        {formatDate(data.date)}
+        {data.updatedDate && ` · Updated ${formatDate(data.updatedDate)}`}
+        {" · "}{readingTime(body ?? "")}
+      </p>
+      {
+        data.tags.length > 0 && (
+          <ul class="cluster artifact-detail__tags">
+            {data.tags.map((tag) => (
+              <li class="label-mono">{tag}</li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </article>
+
+  <section class="section">
+    <div class="wrap prose artifact-detail__body">
+      <Content />
+    </div>
+  </section>
+
+  {
+    related.length > 0 && (
+      <section class="section section--tight">
+        <div class="wrap">
+          <h2>Related artifacts</h2>
+          <ul class="artifact-detail__related">
+            {related.map((a) => (
+              <li>
+                <ArtifactCard entry={a} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section section--tight">
+    <div class="wrap">
+      <Button href="/artifacts" variant="secondary">&larr; Back to all artifacts</Button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .artifact-detail__tags {
+    margin-block-start: var(--space-2);
+  }
+
+  .artifact-detail__tags li {
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    padding: 0.2em 0.7em;
+  }
+
+  .artifact-detail__body :global(h2) {
+    margin-block: var(--space-4) var(--space-2);
+    font-size: 1.35rem;
+  }
+
+  .artifact-detail__body :global(p) {
+    color: var(--color-text-muted);
+  }
+
+  .artifact-detail__body :global(p + p) {
+    margin-block-start: var(--space-2);
+  }
+
+  .artifact-detail__body :global(ul),
+  .artifact-detail__body :global(ol) {
+    margin-block: var(--space-2);
+    padding-inline-start: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    color: var(--color-text-muted);
+  }
+
+  .artifact-detail__body :global(li) {
+    list-style: disc;
+  }
+
+  .artifact-detail__related {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-3);
+    margin-block-start: var(--space-3);
+  }
+</style>
