@@ -97,32 +97,43 @@ this PR's description). For when the owner is ready:
 
 ## Contact-form integration point
 
+> **Update (Mark 18):** the plan below was written before Mark 18 implemented it. The wiring
+> described in steps 1–2 now exists in `src/pages/contact.astro`, gated behind
+> `PUBLIC_CONTACT_ENDPOINT` exactly as anticipated. The env var is **unset in every build this
+> repository runs today**, so the form remains exactly as inert as this section originally
+> described — nothing below is stale about the current live behavior, only about "there is
+> currently no env-var toggle," which is no longer true. See
+> `docs/mark-18-contact-intake-implementation.md` and `workers/contact-intake/README.md` (the
+> backend Worker this connects to — written, not deployed) for the full record. Steps 3–5 below
+> remain open follow-ups.
+
 The form at `/contact` (`src/pages/contact.astro`) is fully built — fields, client-side
-validation, accessible errors, a honeypot field — but is deliberately **inert**: it has no
-submission endpoint of any kind, cannot send/collect/store data, and always resolves a valid
-submission to the honest "not yet connected" status message. This is intentional (see
-`docs/mark-2-vertical-audit.md`-style governance across this ecosystem's "no unverified submission
-capability shipped" rule) — there is currently no env-var toggle that activates a backend.
+validation, accessible errors, a honeypot field — and is inert by default: with
+`PUBLIC_CONTACT_ENDPOINT` unset, it has no live submission target, cannot send/collect/store data,
+and always resolves a valid submission to the honest "not yet connected" status message. This is
+intentional (this ecosystem's "no unverified submission capability shipped" rule) and matches
+every build validated so far.
 
-To connect a real backend once one is owner-approved and verified, this requires an actual code
-change, not just configuration:
+To connect a real backend once one is owner-approved and verified:
 
-1. Stand up an email-delivery endpoint (a Cloudflare Pages Function, a Resend/Formspree endpoint,
-   etc.) that accepts a `POST` with form-encoded fields and returns a 2xx on success.
-2. In `src/pages/contact.astro`'s `<script>`, reintroduce a `CONTACT_ENDPOINT` read (e.g. from a
-   `PUBLIC_CONTACT_ENDPOINT` env var) and a `fetch()` POST branch in the submit handler, replacing
-   the current unconditional "not yet connected" status call — and remove the `onsubmit="return
-false;"` hardening on the `<form>` element only once that real POST path exists (it exists
-   specifically to guarantee no native form submission can leak field data via a GET-with-
-   query-string fallback while no backend is connected).
-3. Apply rate limiting on the endpoint itself (the client already rejects honeypot-filled
-   submissions, but real rate limiting has to live server-side).
+1. ~~Stand up an email-delivery endpoint~~ — see `workers/contact-intake/` (a Cloudflare Worker,
+   written in Mark 18, not yet deployed — deployment requires your own Cloudflare account).
+2. ~~In `src/pages/contact.astro`'s `<script>`, reintroduce a `CONTACT_ENDPOINT` read... and a
+   `fetch()` POST branch~~ — done in Mark 18. The `onsubmit="return false;"` hardening is now
+   conditional (`contactEndpoint ? undefined : "return false;"`), present exactly when
+   `PUBLIC_CONTACT_ENDPOINT` is unset, matching the original intent of this step precisely.
+3. Apply rate limiting on the endpoint itself — implemented in `workers/contact-intake/src/worker.ts`
+   as an optional KV-backed per-IP limiter; **provisioning the KV namespace is a manual step you
+   still need to do** (see the Worker's own README) — without it, the Worker runs but skips rate
+   limiting entirely.
 4. Never wire this to anything that implies a fixed response-time commitment or an automated
    booking/scheduling flow — both are explicitly excluded by brief §9 and the current copy on the
-   page reflects that.
-5. Re-run the public-output guard (see below) after this change — it will fail the build if it
-   detects an external `fetch()` target or form `action` without a matching deliberate update to
-   the guard itself, by design.
+   page reflects that. Unchanged by Mark 18.
+5. Re-run the public-output guard (see below) after actually setting `PUBLIC_CONTACT_ENDPOINT` to a
+   real URL — it will still fail the build once that happens, by design, until you add a narrow,
+   explicit exception for your confirmed Worker URL to `scripts/postbuild-guard.mjs`'s
+   `EXTERNAL_FETCH_PATTERN` check. This was deliberately not done in Mark 18 — see
+   `docs/mark-18-contact-intake-implementation.md` for why.
 
 ## Public-output guard
 

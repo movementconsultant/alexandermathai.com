@@ -1,0 +1,57 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { formatDate } from "../../utils/reading-time";
+
+interface Props {
+  entry: CollectionEntry<"artifacts">;
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+---
+
+<article class="card artifact-card">
+  <p class="label-mono">{formatDate(data.date)}</p>
+  <h3><a href={`/artifacts/${entry.id}`}>{data.title}</a></h3>
+  <p class="artifact-card__summary">{data.summary}</p>
+  {
+    data.tags.length > 0 && (
+      <ul class="cluster artifact-card__tags">
+        {data.tags.map((tag) => (
+          <li class="label-mono">{tag}</li>
+        ))}
+      </ul>
+    )
+  }
+</article>
+
+<style>
+  .artifact-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .artifact-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .artifact-card h3 a {
+    text-decoration: none;
+  }
+
+  .artifact-card h3 a:hover {
+    color: var(--color-accent);
+  }
+
+  .artifact-card__summary {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+  }
+
+  .artifact-card__tags li {
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    padding: 0.2em 0.7em;
+  }
+</style>

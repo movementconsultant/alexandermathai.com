@@ -105,6 +105,32 @@ const notesCollection = defineCollection({
     }),
 });
 
+/**
+ * Vetted Artifacts — deep-dive, owner-reviewed case studies and systems
+ * essays. Distinct from the Ledger/Live Systems telemetry rails
+ * (src/lib/ledger.ts, src/lib/liveSystems.ts): those are automatically
+ * retrieved, unreviewed "Raw Telemetry" per the Mark 13/14 governance
+ * decision; every entry in this collection is hand-authored and committed
+ * directly by a human, exactly like `work` and `notes` — no fetch, no
+ * telemetry exemption, no kill switch needed.
+ */
+const artifactsCollection = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/artifacts" }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      date: z.coerce.date(),
+      tags: z
+        .array(z.enum(["AI", "Systems", "Brand", "Web Infrastructure", "Performance", "Commerce"]))
+        .default([]),
+      summary: z.string().describe("One-paragraph, restrained summary of the artifact"),
+      updatedDate: z.coerce.date().optional(),
+      draft: z.boolean().default(false),
+      coverImage: image().optional(),
+      coverImageAlt: z.string().optional(),
+    }),
+});
+
 const ecosystemCollection = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/ecosystem" }),
   schema: z.object({
@@ -133,4 +159,5 @@ export const collections = {
   work: workCollection,
   notes: notesCollection,
   ecosystem: ecosystemCollection,
+  artifacts: artifactsCollection,
 };
