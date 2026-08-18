@@ -2,7 +2,7 @@
 name: "HERO Footwear & Performance"
 mandate: "Biomechanics-informed footwear and apparel, performance culture, and product storytelling."
 status: "building"
-statusLabel: "Building"
+statusLabel: "Deployment Pending"
 relationshipToTmi: "TMI's product and commerce arm — footwear, apparel, and the infrastructure behind them."
 internalRoute: "/work"
 order: 3

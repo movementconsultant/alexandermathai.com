@@ -2,7 +2,7 @@
 name: "Texas Movement Performance"
 mandate: "Movement, biomechanics, performance science, and training-systems thinking."
 status: "in-development"
-statusLabel: "In development"
+statusLabel: "Deployment Pending"
 relationshipToTmi: "TMI's performance-science and training-systems research arm."
 internalRoute: "/contact"
 order: 4

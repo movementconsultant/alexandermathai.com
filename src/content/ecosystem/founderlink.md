@@ -2,7 +2,7 @@
 name: "FounderLink"
 mandate: "An early-stage Texas Movement International initiative, not yet publicly described in detail."
 status: "in-development"
-statusLabel: "In development"
+statusLabel: "Deployment Pending"
 relationshipToTmi: "An early-stage TMI initiative, listed here for transparency about the full scope of the ecosystem."
 internalRoute: "/contact"
 order: 6

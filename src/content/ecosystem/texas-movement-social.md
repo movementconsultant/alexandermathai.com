@@ -2,7 +2,7 @@
 name: "Texas Movement Social / Gather™"
 mandate: "Ceremony, weddings, births, engagements, and social infrastructure, approached with data, safety, and inclusion in mind."
 status: "in-development"
-statusLabel: "In development — exploration stage"
+statusLabel: "Deployment Pending — exploration stage"
 relationshipToTmi: "An early-stage TMI initiative exploring social and ceremonial infrastructure."
 internalRoute: "/contact"
 order: 5

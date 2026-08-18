@@ -195,6 +195,19 @@ const breadcrumbLd = {
         <button type="submit" class="btn btn--primary" id="contact-submit">Send inquiry</button>
 
         <div id="form-status" class="form-status" role="status" aria-live="polite" hidden></div>
+
+        <details class="secondary-protocol">
+          <summary>Secondary Protocol</summary>
+          <div class="secondary-protocol-body">
+            <p>
+              A secondary intake channel — for encrypted routing, or for use if the primary form
+              above is unavailable — is not yet provisioned. No PGP key, backup address, or secure
+              drop link is published here yet; treat any message claiming to be one as
+              unverified. Once a real secondary channel exists, its fingerprint and address will
+              be published on this page, not sent separately.
+            </p>
+          </div>
+        </details>
       </form>
 
       <aside class="contact-aside">
@@ -314,6 +327,33 @@ const breadcrumbLd = {
     gap: var(--space-2);
     position: sticky;
     top: 6rem;
+  }
+
+  .secondary-protocol {
+    border: 1px solid var(--color-border-strong);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .secondary-protocol summary {
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text);
+  }
+
+  .secondary-protocol-body {
+    margin-top: var(--space-2);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .secondary-protocol-body p {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 </style>
 
