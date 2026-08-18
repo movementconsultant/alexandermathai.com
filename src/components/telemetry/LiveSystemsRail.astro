@@ -17,6 +17,10 @@ const PROFILE_URL = "https://github.com/movementconsultant";
   {
     result.status === "ok" ? (
       <>
+        <p class="live-systems-live">
+          <span class="live-systems-live-dot" aria-hidden="true"></span>
+          Live telemetry
+        </p>
         <ul class="live-systems-list">
           {result.items.map((item) => (
             <li>
@@ -55,6 +59,25 @@ const PROFILE_URL = "https://github.com/movementconsultant";
 </div>
 
 <style>
+  .live-systems-live {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-block-end: var(--space-2);
+  }
+
+  .live-systems-live-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--color-positive);
+    flex-shrink: 0;
+  }
+
   .live-systems-list {
     list-style: none;
     display: flex;
@@ -87,7 +110,6 @@ const PROFILE_URL = "https://github.com/movementconsultant";
   .live-systems-fallback {
     padding: var(--space-3);
     border: 1px solid var(--color-border-strong);
-    border-radius: 0.5rem;
     background: var(--color-bg-raised);
   }
 </style>

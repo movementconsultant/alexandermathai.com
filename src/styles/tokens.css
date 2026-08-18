@@ -1,32 +1,53 @@
 /**
- * Design tokens — "engineering editorial meets performance culture."
+ * Design tokens — "Industrial Brutalism" (Mark 19).
  * Dark-first, with an equal-quality light theme. Respects
  * prefers-color-scheme and a persistent [data-theme] override (see
  * src/components/ui/ThemeToggle.astro and the inline anti-flash script in
  * BaseLayout.astro).
+ *
+ * Mark 19 note: this token set now shares its literal palette with
+ * texasmovement.com's own tokens (Void Black / Panel Grey / Signal Green) —
+ * a deliberate, explicit reversal of the Mark 13 decision (recorded in prior
+ * history) to keep AVM's accent hue distinct from TMI's so the two
+ * properties would never look like the same brand. That reasoning is
+ * superseded here by direct owner instruction to apply one shared visual
+ * skin across both properties. AVM keeps its own domain, routes, content,
+ * and editorial voice — only the color/typography/shape system is now
+ * shared. --color-accent (Signal Green) is restricted to exactly two
+ * surfaces per the Mark 19 UX guardrails: the primary Contact Intake button
+ * and live-telemetry status indicators (LedgerRail / LiveSystemsRail
+ * "active" state) — it does not appear on links, hovers, eyebrows, or
+ * decorative borders. See global.css and the telemetry components for the
+ * enforcement of that restraint.
  */
 
 :root {
   /* ---- Color: dark (default) ---- */
-  --color-bg: #0b0c0d;
-  --color-bg-raised: #141517;
-  --color-surface: #1b1d20;
-  --color-graphite: #232629;
-  --color-border: #2c2f33;
-  --color-border-strong: #3d4147;
-  --color-text: #eeece6;
-  --color-text-muted: #a6a9ad;
-  --color-text-faint: #82868b;
-  --color-accent: #ff5a1f; /* signal orange — used sparingly */
-  --color-accent-text: #100600;
-  --color-focus: #ff5a1f;
-  --color-positive: #7cc68a;
+  --color-bg: #050505;
+  --color-bg-raised: #0e0e0e;
+  --color-surface: #0e0e0e;
+  --color-graphite: #0a0a0a;
+  --color-border: #222222;
+  --color-border-strong: #222222;
+  --color-text: #ffffff;
+  --color-text-muted: #888888;
+  --color-text-faint: #888888;
+  --color-accent: #00ff94; /* Signal Green — reserved: Contact Intake button + live telemetry indicators only */
+  --color-accent-text: #04120a;
+  --color-focus: #ffffff;
+  --color-positive: #00ff94;
   --color-caution: #e8b64a;
 
   color-scheme: dark;
 
-  /* ---- Type ---- */
-  --font-display: "Iowan Old Style", "Sitka Text", Georgia, "Times New Roman", ui-serif, serif;
+  /* ---- Type ----
+     Headings/metadata: monospace, uppercase, tracked out (Mark 19). No new
+     font dependency is introduced — this site loads no Google Fonts, so
+     --font-display now reuses the existing system-monospace stack instead
+     of requesting "Space Mono"/"IBM Plex Mono" as a remote font. Body copy
+     (--font-sans, Inter/system-sans) is unchanged — already satisfies the
+     brief. */
+  --font-display: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", monospace;
   --font-sans:
     "InterVariable", Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
@@ -43,33 +64,25 @@
   --space-6: 5.5rem;
   --space-7: 8rem;
 
-  --radius-sm: 3px;
-  --radius-md: 6px;
+  /* Brutalist rule (Mark 19): border-radius 0 everywhere. Kept as tokens
+     (rather than deleted) since ~10 components reference var(--radius-sm)/
+     var(--radius-md) directly — zeroing here zeroes every one of them
+     without touching each call site. Hardcoded radii (999px pills, 50%
+     dots) are removed individually at their own selectors. */
+  --radius-sm: 0;
+  --radius-md: 0;
 
   --border-hairline: 1px solid var(--color-border);
 
   --ease-signal: cubic-bezier(0.2, 0.7, 0.2, 1);
 
-  /* ---- Mark 13: Future-Firm Operating Console shared semantic layer ----
+  /* ---- Future-Firm Operating Console shared semantic layer ----
      Cross-property vocabulary shared with texasmovement.com's own --ff-*
      tokens (see that repo's src/styles/global.css). Defined once here as
      aliases onto the tokens above, so every value — including the light-
      theme overrides below and the [data-theme] toggle overrides in this
      same file — is inherited automatically; nothing below needs its own
-     media-query or [data-theme] copy.
-
-     --ff-accent-signal / --ff-accent-signal-muted / --ff-focus-ring
-     deliberately alias this site's OWN existing accent (--color-accent,
-     orange) rather than reusing TMI's literal signal-green hex from the
-     shared vocabulary's suggested palette. Part D of the Mark 13 brief
-     explicitly allows adjusting a suggested token value "if it... harms an
-     existing component" — and here the stronger reason is the brief's own
-     non-negotiable rule that AVM must never be visually collapsed into a
-     TMI corporate identity. Giving both properties the literal same accent
-     hue would work directly against that rule; aliasing the ROLE of the
-     token (one restrained, semantically-scarce accent) onto each site's
-     own established color keeps the two properties related in structure
-     without making them look like the same brand. */
+     media-query or [data-theme] copy. */
   --ff-bg-base: var(--color-bg);
   --ff-bg-panel: var(--color-bg-raised);
   --ff-bg-panel-subtle: var(--color-surface);
@@ -88,19 +101,19 @@
 /* System preference, when no explicit toggle choice has been made */
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
-    --color-bg: #f6f4ee;
-    --color-bg-raised: #efece3;
-    --color-surface: #e9e5db;
-    --color-graphite: #dedad0;
-    --color-border: #d3cfc3;
-    --color-border-strong: #b9b3a3;
-    --color-text: #17181a;
-    --color-text-muted: #4d4f52;
-    --color-text-faint: #5a5c5e; /* darkened from #6c6e70 — that failed WCAG AA (4.33:1) against --color-bg-raised; this reaches 5.68:1. See docs/mark-2-release-audit.md. */
-    --color-accent: #ad350e;
-    --color-accent-text: #fffaf4;
-    --color-focus: #ad350e;
-    --color-positive: #256a3c; /* darkened from #2f7a41 — that failed WCAG AA (4.46:1) on the "Publishing" status badge; this reaches 5.55:1. See docs/mark-2-release-audit.md. */
+    --color-bg: #ffffff;
+    --color-bg-raised: #f0f0f0;
+    --color-surface: #f0f0f0;
+    --color-graphite: #f7f7f7;
+    --color-border: #222222;
+    --color-border-strong: #222222;
+    --color-text: #050505;
+    --color-text-muted: #555555;
+    --color-text-faint: #555555;
+    --color-accent: #00ff94;
+    --color-accent-text: #04120a;
+    --color-focus: #050505;
+    --color-positive: #007a46; /* darkened from the shared #00ff94 — that reaches only 1.33:1 as on-white text; this reaches 5.42:1 against --color-bg and 4.76:1 against --color-bg-raised. See docs/mark-2-release-audit.md for the same WCAG-contrast discipline. */
     --color-caution: #8a6415;
     color-scheme: light;
   }
@@ -108,37 +121,37 @@
 
 /* Explicit user toggle wins in both directions */
 :root[data-theme="light"] {
-  --color-bg: #f6f4ee;
-  --color-bg-raised: #efece3;
-  --color-surface: #e9e5db;
-  --color-graphite: #dedad0;
-  --color-border: #d3cfc3;
-  --color-border-strong: #b9b3a3;
-  --color-text: #17181a;
-  --color-text-muted: #4d4f52;
-  --color-text-faint: #6c6e70;
-  --color-accent: #ad350e;
-  --color-accent-text: #fffaf4;
-  --color-focus: #ad350e;
-  --color-positive: #256a3c; /* darkened from #2f7a41 — that failed WCAG AA (4.46:1) on the "Publishing" status badge; this reaches 5.55:1. See docs/mark-2-release-audit.md. */
+  --color-bg: #ffffff;
+  --color-bg-raised: #f0f0f0;
+  --color-surface: #f0f0f0;
+  --color-graphite: #f7f7f7;
+  --color-border: #222222;
+  --color-border-strong: #222222;
+  --color-text: #050505;
+  --color-text-muted: #555555;
+  --color-text-faint: #555555;
+  --color-accent: #00ff94;
+  --color-accent-text: #04120a;
+  --color-focus: #050505;
+  --color-positive: #007a46; /* darkened from the shared #00ff94 — that reaches only 1.33:1 as on-white text; this reaches 5.42:1 against --color-bg and 4.76:1 against --color-bg-raised. See docs/mark-2-release-audit.md for the same WCAG-contrast discipline. */
   --color-caution: #8a6415;
   color-scheme: light;
 }
 
 :root[data-theme="dark"] {
-  --color-bg: #0b0c0d;
-  --color-bg-raised: #141517;
-  --color-surface: #1b1d20;
-  --color-graphite: #232629;
-  --color-border: #2c2f33;
-  --color-border-strong: #3d4147;
-  --color-text: #eeece6;
-  --color-text-muted: #a6a9ad;
-  --color-text-faint: #82868b;
-  --color-accent: #ff5a1f;
-  --color-accent-text: #100600;
-  --color-focus: #ff5a1f;
-  --color-positive: #7cc68a;
+  --color-bg: #050505;
+  --color-bg-raised: #0e0e0e;
+  --color-surface: #0e0e0e;
+  --color-graphite: #0a0a0a;
+  --color-border: #222222;
+  --color-border-strong: #222222;
+  --color-text: #ffffff;
+  --color-text-muted: #888888;
+  --color-text-faint: #888888;
+  --color-accent: #00ff94;
+  --color-accent-text: #04120a;
+  --color-focus: #ffffff;
+  --color-positive: #00ff94;
   --color-caution: #e8b64a;
   color-scheme: dark;
 }
