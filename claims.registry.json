@@ -343,7 +343,7 @@
     },
     {
       "id": "division-media-mandate",
-      "exactText": "Texas Movement Media / Independent long-form storytelling at the intersection of sports, performance science, founders, and culture. / TMI's editorial and distribution arm — content produced and distributed under the Texas Movement Media name. / Publishing on social channels · site in development",
+      "exactText": "Texas Movement Media / Independent long-form storytelling at the intersection of sports, performance science, founders, and culture. / TMI's editorial and distribution arm — content produced and distributed under the Texas Movement Media name. / Publishing on social channels · site deployment pending",
       "routes": ["/ecosystem"],
       "category": "other",
       "qualification": "none",
@@ -356,7 +356,7 @@
     },
     {
       "id": "division-hero-mandate",
-      "exactText": "HERO Footwear & Performance / Biomechanics-informed footwear and apparel, performance culture, and product storytelling. / TMI's product and commerce arm — footwear, apparel, and the infrastructure behind them. / Building",
+      "exactText": "HERO Footwear & Performance / Biomechanics-informed footwear and apparel, performance culture, and product storytelling. / TMI's product and commerce arm — footwear, apparel, and the infrastructure behind them. / Deployment Pending",
       "routes": ["/ecosystem"],
       "category": "product-history",
       "qualification": "none",
@@ -369,7 +369,7 @@
     },
     {
       "id": "division-performance-mandate",
-      "exactText": "Texas Movement Performance / Movement, biomechanics, performance science, and training-systems thinking. / TMI's performance-science and training-systems research arm. / In development",
+      "exactText": "Texas Movement Performance / Movement, biomechanics, performance science, and training-systems thinking. / TMI's performance-science and training-systems research arm. / Deployment Pending",
       "routes": ["/ecosystem"],
       "category": "other",
       "qualification": "none",
@@ -382,7 +382,7 @@
     },
     {
       "id": "division-social-mandate",
-      "exactText": "Texas Movement Social / Gather™ / Ceremony, weddings, births, engagements, and social infrastructure, approached with data, safety, and inclusion in mind. / An early-stage TMI initiative exploring social and ceremonial infrastructure. / In development — exploration stage",
+      "exactText": "Texas Movement Social / Gather™ / Ceremony, weddings, births, engagements, and social infrastructure, approached with data, safety, and inclusion in mind. / An early-stage TMI initiative exploring social and ceremonial infrastructure. / Deployment Pending — exploration stage",
       "routes": ["/ecosystem"],
       "category": "other",
       "qualification": "none",
@@ -396,7 +396,7 @@
     },
     {
       "id": "division-founderlink-mandate",
-      "exactText": "FounderLink / An early-stage Texas Movement International initiative, not yet publicly described in detail. / An early-stage TMI initiative, listed here for transparency about the full scope of the ecosystem. / In development",
+      "exactText": "FounderLink / An early-stage Texas Movement International initiative, not yet publicly described in detail. / An early-stage TMI initiative, listed here for transparency about the full scope of the ecosystem. / Deployment Pending",
       "routes": ["/ecosystem"],
       "category": "other",
       "qualification": "none",

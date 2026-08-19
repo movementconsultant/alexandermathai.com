@@ -2,7 +2,7 @@
 name: "Texas Movement Media"
 mandate: "Independent long-form storytelling at the intersection of sports, performance science, founders, and culture."
 status: "publishing"
-statusLabel: "Publishing on social channels · site in development"
+statusLabel: "Publishing on social channels · site deployment pending"
 relationshipToTmi: "TMI's editorial and distribution arm — content produced and distributed under the Texas Movement Media name."
 internalRoute: "/work"
 order: 2

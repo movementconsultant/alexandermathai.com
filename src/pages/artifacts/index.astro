@@ -1,0 +1,69 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ArtifactCard from "../../components/content/ArtifactCard.astro";
+
+const artifacts = (await getCollection("artifacts", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://alexandermathai.com/" },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Artifacts",
+      item: "https://alexandermathai.com/artifacts",
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="Artifacts — Alexander Mathai"
+  description="Deep-dive, owner-reviewed case studies and systems essays — distinct from the automatically retrieved Signal Archive and Operational Commit Log telemetry rails."
+  structuredData={[breadcrumbLd]}
+>
+  <section class="section section--tight">
+    <div class="wrap prose">
+      <p class="eyebrow">Artifacts</p>
+      <h1>Vetted artifacts.</h1>
+      <p class="lede">
+        Deep-dive case studies and systems essays, each reviewed and published deliberately —
+        distinct from <a href="/ledger" class="text-link">the Signal Archive</a> and
+        <a href="/systems" class="text-link">the Operational Commit Log</a>, which are automatically retrieved and
+        not individually reviewed. Everything below is hand-authored and owner-approved before it
+        appears.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      {
+        artifacts.length > 0 ? (
+          <ul class="artifacts-grid">
+            {artifacts.map((entry) => (
+              <li>
+                <ArtifactCard entry={entry} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="lede">No artifacts published yet.</p>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .artifacts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-3);
+  }
+</style>

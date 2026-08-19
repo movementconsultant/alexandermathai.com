@@ -1,6 +1,17 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 
+// Mark 18 — env-var-gated live submission, per this file's own prior plan
+// in docs/site-operations.md "Contact-form integration point". Unset in
+// every build this repository runs today (resolves to an empty string at
+// build time via Vite's import.meta.env inlining), which keeps this page
+// exactly as inert as it was before this pass — no literal external fetch()
+// target reaches dist/, so scripts/postbuild-guard.mjs's
+// EXTERNAL_FETCH_PATTERN check stays green. See
+// docs/mark-18-contact-intake-implementation.md and
+// workers/contact-intake/README.md for the backend this would connect to.
+const contactEndpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? "";
+
 const reasonOptions = [
   { value: "ai-systems", label: "AI systems / operations" },
   { value: "web-brand", label: "Web or brand architecture" },
@@ -59,7 +70,13 @@ const breadcrumbLd = {
 
   <section class="section contact-section">
     <div class="wrap contact-grid">
-      <form id="contact-form" class="contact-form" novalidate onsubmit="return false;">
+      <form
+        id="contact-form"
+        class="contact-form"
+        novalidate
+        data-contact-endpoint={contactEndpoint}
+        onsubmit={contactEndpoint ? undefined : "return false;"}
+      >
         <div class="form-field">
           <label for="field-name">Name <span aria-hidden="true">*</span></label>
           <input
@@ -178,6 +195,19 @@ const breadcrumbLd = {
         <button type="submit" class="btn btn--primary" id="contact-submit">Send inquiry</button>
 
         <div id="form-status" class="form-status" role="status" aria-live="polite" hidden></div>
+
+        <details class="secondary-protocol">
+          <summary>Secondary Protocol</summary>
+          <div class="secondary-protocol-body">
+            <p>
+              A secondary intake channel — for encrypted routing, or for use if the primary form
+              above is unavailable — is not yet provisioned. No PGP key, backup address, or secure
+              drop link is published here yet; treat any message claiming to be one as
+              unverified. Once a real secondary channel exists, its fingerprint and address will
+              be published on this page, not sent separately.
+            </p>
+          </div>
+        </details>
       </form>
 
       <aside class="contact-aside">
@@ -298,19 +328,48 @@ const breadcrumbLd = {
     position: sticky;
     top: 6rem;
   }
+
+  .secondary-protocol {
+    border: 1px solid var(--color-border-strong);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .secondary-protocol summary {
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text);
+  }
+
+  .secondary-protocol-body {
+    margin-top: var(--space-2);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .secondary-protocol-body p {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
 </style>
 
 <script>
   const form = document.getElementById("contact-form") as HTMLFormElement | null;
   const statusEl = document.getElementById("form-status");
 
-  // No submission endpoint exists in this build, deliberately: there is no
-  // owner-approved, verified delivery backend for this form yet. This form
-  // cannot collect, send, or store data anywhere — it only validates fields
-  // client-side and shows an honest "not connected" status. Re-adding a real
-  // endpoint requires a reviewed code change here (not just an env var),
-  // matching this ecosystem's "no unverified submission capability shipped"
-  // rule. See docs/mark-2-launch-plan.md "Contact-form decision".
+  // Mark 18: reads the build-time-resolved PUBLIC_CONTACT_ENDPOINT value off
+  // the form's own data attribute (set in this file's frontmatter) rather
+  // than importing it directly here, so this script keeps full TypeScript
+  // processing (a `define:vars` script loses that — see
+  // docs/mark-18-contact-intake-implementation.md). Empty string in every
+  // build this repository runs today, which keeps this form exactly as
+  // inert as it was before this pass — see docs/mark-2-launch-plan.md
+  // "Contact-form decision" for the original rationale this still honors.
+  const contactEndpoint = form?.dataset.contactEndpoint ?? "";
 
   const requiredFields = [
     { id: "field-name", errorId: "error-name", message: "Enter your name." },
@@ -388,7 +447,7 @@ const breadcrumbLd = {
     statusEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
-  form?.addEventListener("submit", (event) => {
+  form?.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (statusEl) statusEl.hidden = true;
 
@@ -407,12 +466,57 @@ const breadcrumbLd = {
       return;
     }
 
-    // No delivery backend exists in this build (see the note above the
-    // requiredFields declaration) — this is the only outcome a valid
-    // submission can reach. Nothing is sent, stored, or promised.
-    setStatus(
-      "This form isn't connected to a delivery service yet, so this inquiry can't be sent from this page right now. There's no other verified contact route published here yet either — please check back soon.",
-      "pending-integration",
-    );
+    // No delivery backend is configured in this build (contactEndpoint is
+    // an empty string in every build this repository runs today) — this is
+    // the only outcome a valid submission can reach. Nothing is sent,
+    // stored, or promised.
+    if (!contactEndpoint) {
+      setStatus(
+        "This form isn't connected to a delivery service yet, so this inquiry can't be sent from this page right now. There's no other verified contact route published here yet either — please check back soon.",
+        "pending-integration",
+      );
+      return;
+    }
+
+    const submitButton = document.getElementById("contact-submit") as HTMLButtonElement | null;
+    if (submitButton) submitButton.disabled = true;
+    setStatus("Sending…", "pending-integration");
+
+    const name = (document.getElementById("field-name") as HTMLInputElement | null)?.value ?? "";
+    const email = (document.getElementById("field-email") as HTMLInputElement | null)?.value ?? "";
+    const organization =
+      (document.getElementById("field-organization") as HTMLInputElement | null)?.value ?? "";
+    const reason =
+      (document.getElementById("field-reason") as HTMLSelectElement | null)?.value ?? "";
+    const constraint =
+      (document.getElementById("field-constraint") as HTMLTextAreaElement | null)?.value ?? "";
+    const outcome =
+      (document.getElementById("field-outcome") as HTMLTextAreaElement | null)?.value ?? "";
+    const message = [
+      reason && `Reason: ${reason}`,
+      constraint && `What's changing/constrained: ${constraint}`,
+      outcome && `Outcome that matters: ${outcome}`,
+    ]
+      .filter(Boolean)
+      .join("\n\n");
+
+    try {
+      const response = await fetch(contactEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, organization, message }),
+      });
+      const result = await response.json().catch(() => ({}) as { ok?: boolean; error?: string });
+      if (response.ok && result.ok) {
+        setStatus("Thanks — your inquiry has been received.", "success");
+        form.reset();
+      } else {
+        setStatus(result.error ?? "Something went wrong. Please try again.", "error");
+      }
+    } catch {
+      setStatus("Something went wrong. Please try again.", "error");
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
   });
 </script>

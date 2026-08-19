@@ -36,7 +36,6 @@ const categories: { value: string; label: string }[] = [
 
   .work-filter__btn {
     border: 1px solid var(--color-border-strong);
-    border-radius: 999px;
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
     font-weight: 500;
@@ -46,13 +45,13 @@ const categories: { value: string; label: string }[] = [
 
   .work-filter__btn:hover {
     color: var(--color-text);
-    border-color: var(--color-accent);
+    border-color: var(--color-text);
   }
 
   .work-filter__btn[aria-pressed="true"] {
-    background: var(--color-accent);
-    color: var(--color-accent-text);
-    border-color: var(--color-accent);
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-color: var(--color-text);
   }
 </style>
 

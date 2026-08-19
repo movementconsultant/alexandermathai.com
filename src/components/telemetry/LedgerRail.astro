@@ -17,6 +17,10 @@ const PUBLICATION_URL = "https://texasmovement.substack.com";
   {
     result.status === "ok" ? (
       <>
+        <p class="ledger-live">
+          <span class="ledger-live-dot" aria-hidden="true"></span>
+          Live telemetry
+        </p>
         <ul class="ledger-list">
           {result.items.map((item) => (
             <li>
@@ -44,8 +48,13 @@ const PUBLICATION_URL = "https://texasmovement.substack.com";
       </>
     ) : (
       <div class="ledger-fallback">
-        <p>
-          The Ledger's automated index isn't available for this build. Read the newsletter directly:
+        <p class="signal-lost-line">
+          <span aria-hidden="true">&gt;</span> SIGNAL LOST // AWAITING RECONNECTION // ROUTING TO
+          SOURCE
+        </p>
+        <p class="signal-lost-description">
+          The Signal Archive's automated index isn't available for this build. Read the newsletter
+          directly:
         </p>
         <a href={PUBLICATION_URL} target="_blank" rel="noopener noreferrer" class="text-link">
           Texas Movement on Substack &rarr;
@@ -56,6 +65,25 @@ const PUBLICATION_URL = "https://texasmovement.substack.com";
 </div>
 
 <style>
+  .ledger-live {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-block-end: var(--space-2);
+  }
+
+  .ledger-live-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--color-positive);
+    flex-shrink: 0;
+  }
+
   .ledger-list {
     list-style: none;
     display: flex;
@@ -82,10 +110,29 @@ const PUBLICATION_URL = "https://texasmovement.substack.com";
     white-space: nowrap;
   }
 
+  /* Mark 25 — "Signal Lost" terminal state. When the build-time fetch
+     fails, this should read as an intentional, gracefully-handled system
+     state, not a broken page. Signal Green here is a direct extension of
+     the same "live telemetry indicator" allowance already used for the
+     OK-state dot above — this IS that indicator's degraded state. */
   .ledger-fallback {
     padding: var(--space-3);
     border: 1px solid var(--color-border-strong);
-    border-radius: 0.5rem;
     background: var(--color-bg-raised);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .signal-lost-line {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+    color: var(--color-accent);
+  }
+
+  .signal-lost-description {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
   }
 </style>

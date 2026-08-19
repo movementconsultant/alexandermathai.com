@@ -1,0 +1,88 @@
+{
+  "mark": 13,
+  "title": "AVM Founder Systems Archive (Visual System)",
+  "repository": "movementconsultant/alexandermathai.com",
+  "branch": "claude/mark-18-avm-furnishing",
+  "scope": "visual-system-pass-only",
+  "companionDocs": {
+    "tmi": "texasmovement.com/docs/mark-13-tmi-future-firm-operating-console.md",
+    "decisionRecord": "texasmovement.com/docs/internal/mark-13-operating-console-vs-founder-archive-decision-record.md"
+  },
+  "preExistingSystemAssessment": {
+    "conclusion": "AVM's existing design system already satisfied nearly all Founder Systems Archive requirements before this pass",
+    "evidence": [
+      "dark-first with prefers-color-scheme + explicit [data-theme] toggle, both themes already contrast-audited (docs/mark-2-release-audit.md)",
+      "serif --font-display headings (editorial identity, distinct from TMI's grotesk/mono system-index face)",
+      "38rem reading measure + three-tier text color system already tuned for long-form reading",
+      "single restrained --color-accent used only for focus/buttons/eyebrow, status communicated via text+role=status never color alone",
+      "3px/6px border radii already crisp and disciplined pre-Mark-13",
+      "zero hardcoded colors outside tokens.css across the entire src tree"
+    ],
+    "decision": "narrow, additive-only pass (token layer) rather than a redesign, to avoid risking 74 passing e2e checks and to avoid moving AVM's look toward TMI's"
+  },
+  "changed": {
+    "files": ["src/styles/tokens.css"],
+    "description": "added a --ff-* semantic alias block inside the existing :root declaration; every alias is a var() reference to an existing AVM token, so light-theme and [data-theme] toggle overrides apply automatically with no duplication"
+  },
+  "notChanged": [
+    "src/styles/global.css",
+    "every component under src/components/**",
+    "every page under src/pages/**",
+    "claims registry / claims governance",
+    "social-domain guard / src/data/blocklist.json",
+    "contact.astro and its PUBLIC_CONTACT_ENDPOINT gating",
+    "PUBLIC_PREVIEW noindex/canonical/sitemap gating",
+    "the frozen fallback branch (claude/alexander-mathai-placeholder, PR #1) -- never opened"
+  ],
+  "deliberateDeviationFromSharedVocabulary": {
+    "token": "--ff-accent-signal",
+    "briefSuggestedValue": "#00ff94 (TMI's literal green)",
+    "actualValue": "var(--color-accent) -- AVM's own existing orange accent",
+    "reason": "the brief's own non-negotiable rule is that AVM must never be visually/semantically collapsed into a TMI corporate identity; giving both properties the literal same accent hue works against that rule. The shared vocabulary is the ROLE of the token (one restrained, scarce accent), not a literal shared hex. --ff-focus-ring follows the same reasoning."
+  },
+  "tokenAliasTable": {
+    "--ff-bg-base": { "aliasOf": "--color-bg", "dark": "#0b0c0d", "light": "#f6f4ee" },
+    "--ff-bg-panel": { "aliasOf": "--color-bg-raised", "dark": "#141517", "light": "#efece3" },
+    "--ff-bg-panel-subtle": { "aliasOf": "--color-surface", "dark": "#1b1d20", "light": "#e9e5db" },
+    "--ff-text-primary": { "aliasOf": "--color-text", "dark": "#eeece6", "light": "#17181a" },
+    "--ff-text-secondary": { "aliasOf": "--color-text-muted", "dark": "#a6a9ad", "light": "#4d4f52" },
+    "--ff-text-muted": { "aliasOf": "--color-text-faint", "dark": "#82868b", "light": "#5a5c5e" },
+    "--ff-border-structural": { "aliasOf": "--color-border", "dark": "#2c2f33", "light": "#d3cfc3" },
+    "--ff-border-emphasis": { "aliasOf": "--color-border-strong", "dark": "#3d4147", "light": "#b9b3a3" },
+    "--ff-accent-signal": { "aliasOf": "--color-accent", "dark": "#ff5a1f", "light": "#ad350e", "deviatesFromBrief": true },
+    "--ff-accent-signal-muted": { "aliasOf": "color-mix(in srgb, var(--color-accent) 16%, transparent)", "note": "theme-adaptive tint, no hardcoded rgba tuple needed" },
+    "--ff-focus-ring": { "aliasOf": "--color-focus", "dark": "#ff5a1f", "light": "#ad350e", "deviatesFromBrief": true },
+    "--ff-font-ui": { "aliasOf": "--font-sans" },
+    "--ff-font-mono": { "aliasOf": "--font-mono" }
+  },
+  "routesStyled": [],
+  "routesStyledNote": "no route or component markup changed; the alias layer applies automatically wherever --color-* is already consumed",
+  "mediaAndSocialIntegrity": {
+    "newSocialLinksAdded": false,
+    "newFounderClaimsAdded": false,
+    "newExternalFeedsAdded": false,
+    "existingLedgerAndSystemsRailsTouched": false
+  },
+  "validation": {
+    "typecheck": "0 errors, 0 warnings, 64 pre-existing hints unchanged",
+    "e2ePreview": "46/46 passed",
+    "e2eProduction": "28/28 passed",
+    "postbuildGuard": "0 violations (both e2e build runs)",
+    "manualVisualQA": ["/ (light + dark)", "/notes (dark)", "/ledger (dark)"]
+  },
+  "ownerAcceptanceCriteria": [
+    "Feels like a founder systems archive, not a TMI clone",
+    "Reading experience remains primary",
+    "Dark visual system is related but softer and editorial",
+    "No new founder claims, social links, external feeds, or influencer cues"
+  ],
+  "explicitNonActions": [
+    "no merge / deploy / push-to-main / PR draft-status change",
+    "no route, content, claim, social link, feed, embed, analytics, or conversion added",
+    "no dependency or lockfile change",
+    "no new or remote font added",
+    "no accessibility/test/guard/fallback weakened",
+    "no political or LA28/Olympic content added",
+    "frozen fallback (PR #1) never touched"
+  ]
+}
