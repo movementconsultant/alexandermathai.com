@@ -17,6 +17,7 @@ export const ROUTES = [
   "/notes/performance-is-a-systems-problem",
   "/ledger",
   "/systems",
+  "/field",
   "/artifacts",
   "/artifacts/systems-over-tactics",
   "/about",
