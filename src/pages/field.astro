@@ -14,6 +14,12 @@
 // real, already-server-rendered text, a green scanline hover sweep, a
 // dynamically-computed (not hardcoded) session-id URL hash, and live
 // relative timestamps alongside the real ISO dates.
+//
+// Mark 25 — animation fatigue guard: a repeat visitor (localStorage flag)
+// gets a ~0.2s flash instead of the full boot sequence; a SKIP [ESC]
+// button/keypress resolves the overlay immediately either way; clicking
+// anywhere in the log container instantly completes any in-progress
+// typewriter animation instead of making the visitor wait it out.
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 interface FieldEntry {
@@ -78,6 +84,7 @@ const breadcrumbLd = {
 >
   <div class="field-boot-overlay" id="field-boot-overlay" hidden aria-hidden="true">
     <pre class="field-boot-lines" id="field-boot-lines"></pre>
+    <button type="button" class="field-boot-skip" id="field-boot-skip">SKIP [ESC]</button>
   </div>
 
   <section class="section section--tight">
@@ -256,7 +263,7 @@ const breadcrumbLd = {
     align-items: center;
     justify-content: center;
     opacity: 1;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.2s ease;
   }
 
   /* Author CSS beats the UA stylesheet's [hidden] rule at equal
@@ -280,39 +287,105 @@ const breadcrumbLd = {
     line-height: 1.8;
     margin: 0;
   }
+
+  /* Mark 25 — animation fatigue guard: a subtle, brutalist skip control.
+     Bottom-corner placement so it never competes with the boot lines for
+     attention on a first-time visit, but is easy to find on a repeat one. */
+  .field-boot-skip {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    background: transparent;
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  .field-boot-skip:hover,
+  .field-boot-skip:focus-visible {
+    color: var(--color-text);
+    border-color: var(--color-text);
+  }
 </style>
 
 <script>
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const VISITED_KEY = "field-visited";
 
   // --- 1. Terminal boot sequence -------------------------------------
   // Overlay is rendered `hidden` in the template; only unhidden here, and
   // only when motion isn't reduced, so a no-JS or reduced-motion visitor
   // never sees a "stuck" overlay.
+  //
+  // Mark 25 — animation fatigue guard: a repeat visitor (localStorage flag
+  // already set) gets a 0.2s flash instead of the full ~2s sequence. Either
+  // way, a SKIP button and the Escape key resolve the overlay immediately.
   function runBootSequence() {
     const overlayEl = document.getElementById("field-boot-overlay");
     const linesEl = document.getElementById("field-boot-lines");
+    const skipEl = document.getElementById("field-boot-skip");
     if (!overlayEl || !linesEl || reducedMotion) return;
     const overlay: HTMLElement = overlayEl;
     const lines_el: HTMLElement = linesEl;
 
-    const lines = ["> INITIALIZING...", "> AUTHENTICATED", "> RENDERING"];
+    let hasVisited = false;
+    try {
+      hasVisited = localStorage.getItem(VISITED_KEY) === "1";
+      localStorage.setItem(VISITED_KEY, "1");
+    } catch {
+      // Storage unavailable (private browsing, disabled) — fall back to
+      // treating every visit as first-time. Not worth failing the page over.
+    }
+
     overlay.hidden = false;
+    let pendingTimeout: ReturnType<typeof setTimeout> | null = null;
+    let finished = false;
+
+    function finishBoot() {
+      if (finished) return;
+      finished = true;
+      if (pendingTimeout) clearTimeout(pendingTimeout);
+      overlay.classList.add("is-fading");
+      setTimeout(() => {
+        overlay.hidden = true;
+      }, 200);
+    }
+
+    skipEl?.addEventListener("click", finishBoot);
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        if (event.key === "Escape") finishBoot();
+      },
+      { once: true },
+    );
+
+    if (hasVisited) {
+      // Abbreviated flash: show the final boot state briefly, no line-by-
+      // line typing.
+      lines_el.textContent = "> INITIALIZING...\n> AUTHENTICATED\n> RENDERING";
+      pendingTimeout = setTimeout(finishBoot, 200);
+      return;
+    }
+
+    const lines = ["> INITIALIZING...", "> AUTHENTICATED", "> RENDERING"];
     let shown = "";
     let i = 0;
 
     function nextLine() {
+      if (finished) return;
       if (i >= lines.length) {
-        overlay.classList.add("is-fading");
-        setTimeout(() => {
-          overlay.hidden = true;
-        }, 300);
+        finishBoot();
         return;
       }
       shown += (shown ? "\n" : "") + lines[i];
       lines_el.textContent = shown;
       i += 1;
-      setTimeout(nextLine, 650);
+      pendingTimeout = setTimeout(nextLine, 650);
     }
 
     nextLine();
@@ -323,6 +396,19 @@ const breadcrumbLd = {
   // present for no-JS/AT). This only visually re-types it; it does not
   // delay or hide content from anyone who isn't watching the animation
   // play out.
+  //
+  // Mark 25 — clicking anywhere in the log container instantly completes
+  // every in-progress typewriter instead of making the visitor wait.
+  const activeTypewriters = new Map<HTMLElement, { full: string; intervalId: number }>();
+
+  function completeAllTypewriters() {
+    activeTypewriters.forEach(({ full, intervalId }, el) => {
+      clearInterval(intervalId);
+      el.textContent = full;
+    });
+    activeTypewriters.clear();
+  }
+
   function runTypewriter() {
     if (reducedMotion) return;
     const notes = document.querySelectorAll<HTMLElement>("[data-typewriter]");
@@ -335,15 +421,21 @@ const breadcrumbLd = {
       const perChar = Math.min(14, Math.max(4, 500 / full.length));
       let pos = 0;
       const start = () => {
-        const id = setInterval(() => {
+        const id = window.setInterval(() => {
           pos += 1;
           el.textContent = full.slice(0, pos);
-          if (pos >= full.length) clearInterval(id);
+          if (pos >= full.length) {
+            clearInterval(id);
+            activeTypewriters.delete(el);
+          }
         }, perChar);
+        activeTypewriters.set(el, { full, intervalId: id });
       };
       setTimeout(start, index * 60);
     });
   }
+
+  document.querySelector(".field-log")?.addEventListener("click", completeAllTypewriters);
 
   // --- 3. Session-id URL hash ------------------------------------------
   // Real current date, computed client-side — not a hardcoded example
