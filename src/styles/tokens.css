@@ -13,12 +13,16 @@
  * superseded here by direct owner instruction to apply one shared visual
  * skin across both properties. AVM keeps its own domain, routes, content,
  * and editorial voice — only the color/typography/shape system is now
- * shared. --color-accent (Signal Green) is restricted to exactly two
- * surfaces per the Mark 19 UX guardrails: the primary Contact Intake button
- * and live-telemetry status indicators (LedgerRail / LiveSystemsRail
- * "active" state) — it does not appear on links, hovers, eyebrows, or
- * decorative borders. See global.css and the telemetry components for the
- * enforcement of that restraint.
+ * shared. --color-accent (Signal Green) was originally restricted to
+ * exactly two surfaces per the Mark 19 UX guardrails: the primary Contact
+ * Intake button and live-telemetry status indicators (LedgerRail /
+ * LiveSystemsRail "active" state). Mark 29 (owner-authorized policy
+ * amendment) added one explicit third use: the Consulting page's
+ * "Purchase [Tier]" buttons (src/components/ui/PurchaseButton.astro) —
+ * real payment functionality, not a decorative accent. Still nowhere
+ * else — not links, hovers, eyebrows, or decorative borders. See
+ * global.css and the telemetry components for the enforcement of that
+ * restraint.
  */
 
 :root {
