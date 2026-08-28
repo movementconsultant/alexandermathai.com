@@ -1,0 +1,119 @@
+---
+import Button from "../ui/Button.astro";
+import { primaryCta, secondaryCta } from "../../data/nav";
+---
+
+<section class="hero section section--tight">
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <p class="eyebrow">Alexander Mathai / Founder-Operator</p>
+      <h1>Build the system behind the ambition.</h1>
+      <p class="lede">
+        I help founders, brands, and performance-minded organizations turn fragmented ideas, tools,
+        content, and operations into owned systems built to execute.
+      </p>
+      <div class="cluster hero__ctas">
+        <Button href={primaryCta.href} variant="primary">{primaryCta.label}</Button>
+        <Button href={secondaryCta.href} variant="secondary">{secondaryCta.label}</Button>
+      </div>
+    </div>
+
+    <div
+      class="hero__visual"
+      role="img"
+      aria-label="Diagrammatic load-path line connecting five system nodes across a grid, representing dependencies routed into a single owned system."
+    >
+      <svg
+        viewBox="0 0 480 420"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <defs>
+          <pattern id="hero-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M40 0H0V40" fill="none" stroke="var(--color-border)" stroke-width="1"></path>
+          </pattern>
+        </defs>
+        <rect width="480" height="420" fill="url(#hero-grid)"></rect>
+        <g
+          class="hero-path"
+          fill="none"
+          stroke="var(--color-text-muted)"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M40 340 L140 340 L140 260 L260 260 L260 160 L380 160 L380 60"></path>
+        </g>
+        <g fill="var(--color-text-muted)">
+          <circle cx="40" cy="340" r="5"></circle>
+          <circle cx="140" cy="260" r="5"></circle>
+          <circle cx="260" cy="160" r="5"></circle>
+          <circle cx="380" cy="60" r="6"></circle>
+        </g>
+        <g
+          fill="var(--color-text-faint)"
+          font-family="ui-monospace, monospace"
+          font-size="11"
+          letter-spacing="0.02em"
+        >
+          <text x="46" y="362">TOOLS</text>
+          <text x="146" y="282">CONTENT</text>
+          <text x="266" y="182">OPERATIONS</text>
+          <text x="330" y="46">OWNED SYSTEM</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  @media (max-width: 56rem) {
+    .hero__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .hero__copy h1 {
+    margin-block: var(--space-2) var(--space-3);
+    max-width: 20ch;
+  }
+
+  .hero__ctas {
+    margin-block-start: var(--space-4);
+  }
+
+  .hero__visual {
+    border: var(--border-hairline);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-raised);
+    overflow: hidden;
+  }
+
+  .hero__visual svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-path {
+      stroke-dasharray: 640;
+      stroke-dashoffset: 640;
+      animation: draw-path 1.4s var(--ease-signal) 0.2s forwards;
+    }
+  }
+
+  @keyframes draw-path {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+</style>

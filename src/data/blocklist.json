@@ -1,0 +1,15 @@
+{
+  "_comment": "Emergency kill switch for the telemetry rails (Mark 13/14 governance decision). Add an identifier below to instantly hide that specific item from its rail on the next build/deploy, without touching code or breaking the rest of the stream. No build-time network call, no deploy pipeline change, no restart needed beyond a normal rebuild. See docs/mark-13-telemetry-rails-implementation.md 'Kill switch'.",
+  "github": {
+    "_comment": "Commit SHAs (full or the first 7+ chars GitHub's events API returns) to hide from the Live Systems rail.",
+    "blockedShas": []
+  },
+  "substack": {
+    "_comment": "Exact article URLs (as they appear in the feed's <link>) to hide from the Ledger rail.",
+    "blockedUrls": []
+  },
+  "youtube": {
+    "_comment": "YouTube video IDs (the yt:videoId value, e.g. 'dQw4w9WgXcQ') to hide from a Latest Signal rail, if one is ever added to this site.",
+    "blockedVideoIds": []
+  }
+}

@@ -1,0 +1,58 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import NoteCard from "../../components/content/NoteCard.astro";
+
+const notes = (await getCollection("notes", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+);
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://alexandermathai.com/" },
+    { "@type": "ListItem", position: 2, name: "Notes", item: "https://alexandermathai.com/notes" },
+  ],
+};
+---
+
+<BaseLayout
+  title="Notes — Alexander Mathai"
+  description="Field notes, build logs, system briefs, and essays on systems, AI, web infrastructure, brand, performance, media, commerce, and founder operations."
+  structuredData={[breadcrumbLd]}
+>
+  <section class="section section--tight">
+    <div class="wrap prose">
+      <p class="eyebrow">Notes</p>
+      <h1>Field notes and working thinking.</h1>
+      <p class="lede">
+        Shorter, more frequent writing than the operating thesis — build logs, essays, and notes on
+        systems, AI, brand, performance, media, and commerce as the work happens.
+      </p>
+      <a href="/notes.xml" class="text-link">RSS feed &rarr;</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <ul class="notes-grid">
+        {
+          notes.map((entry) => (
+            <li>
+              <NoteCard entry={entry} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-3);
+  }
+</style>

@@ -1,0 +1,474 @@
+---
+// src/pages/field.astro
+//
+// Mark 22 — "Field Log": a dense, timestamped operations log. Seeded with
+// real, dated entries drawn from this repository's own commit history (see
+// `git log`), not from any external platform — this session has no TikTok
+// access and no way to verify unobserved social-media activity, so nothing
+// here claims to mirror a specific external account's posting cadence.
+// Framed honestly as this site's own build/engineering/governance log.
+//
+// Mark 24 — signature interactions: a terminal boot sequence (skipped
+// entirely under prefers-reduced-motion or no-JS — see the hidden overlay
+// markup below), a character-by-character typewriter reveal of each note's
+// real, already-server-rendered text, a green scanline hover sweep, a
+// dynamically-computed (not hardcoded) session-id URL hash, and live
+// relative timestamps alongside the real ISO dates.
+//
+// Mark 25 — animation fatigue guard: a repeat visitor (localStorage flag)
+// gets a ~0.2s flash instead of the full boot sequence; a SKIP [ESC]
+// button/keypress resolves the overlay immediately either way; clicking
+// anywhere in the log container instantly completes any in-progress
+// typewriter animation instead of making the visitor wait it out.
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+interface FieldEntry {
+  date: string; // ISO, for the <time> element
+  label: string; // short display form
+  note: string;
+  tags: string[];
+}
+
+const entries: FieldEntry[] = [
+  {
+    date: "2026-08-18",
+    label: "08-18",
+    note: "Sovereign lexicon applied ecosystem-wide; secondary intake protocol added to /contact.",
+    tags: ["copy", "contact"],
+  },
+  {
+    date: "2026-08-18",
+    label: "08-18",
+    note: "Brutalist visual system (Void Black / Signal Green / 0px radius) applied across TMI and AVM.",
+    tags: ["design"],
+  },
+  {
+    date: "2026-08-17",
+    label: "08-17",
+    note: "Contact-intake Worker source and live contact-form wiring shipped (undeployed).",
+    tags: ["engineering"],
+  },
+  {
+    date: "2026-08-17",
+    label: "08-17",
+    note: "Signal Archive and Operational Commit Log telemetry rails added.",
+    tags: ["telemetry"],
+  },
+  {
+    date: "2026-08-17",
+    label: "08-17",
+    note: "Founder systems archive and AVM founder-layer review completed.",
+    tags: ["governance"],
+  },
+];
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://alexandermathai.com/" },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Field Log",
+      item: "https://alexandermathai.com/field",
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="Field Log — Alexander Mathai"
+  description="A dense, timestamped log of this site's own build, design, and governance activity — hand-curated, not automatically retrieved."
+  structuredData={[breadcrumbLd]}
+>
+  <div class="field-boot-overlay" id="field-boot-overlay" hidden aria-hidden="true">
+    <pre class="field-boot-lines" id="field-boot-lines"></pre>
+    <button type="button" class="field-boot-skip" id="field-boot-skip">SKIP [ESC]</button>
+  </div>
+
+  <section class="section section--tight">
+    <div class="wrap prose">
+      <p class="eyebrow">Field Log</p>
+      <h1>Operations, timestamped.</h1>
+      <p class="lede">
+        A hand-curated, dated log of this site's own build, design, and governance activity —
+        distinct from the automatically retrieved Signal Archive and Operational Commit Log.
+        Entries below are drawn from this repository's real commit history, not from any external
+        platform.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <ul class="field-log">
+        {
+          entries.map((entry) => (
+            <li>
+              <time class="field-log-date" datetime={entry.date}>
+                {entry.label}
+              </time>
+              <span class="field-log-note-wrap">
+                <span class="field-log-note" data-typewriter>
+                  {entry.note}
+                </span>
+                <span class="field-log-relative" data-iso={entry.date} aria-hidden="true" />
+              </span>
+              {entry.tags.length > 0 && (
+                <span class="field-log-tags">
+                  {entry.tags.map((tag) => (
+                    <span class="field-log-tag">{tag}</span>
+                  ))}
+                </span>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .field-log {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-border-strong);
+    font-family: var(--font-mono);
+  }
+
+  .field-log li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 5rem 1fr auto;
+    align-items: baseline;
+    gap: var(--space-2);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-border);
+    overflow: hidden;
+  }
+
+  .field-log li:last-child {
+    border-bottom: none;
+  }
+
+  .field-log li:nth-child(even) {
+    background: var(--color-bg-raised);
+  }
+
+  /* Mark 24 — green scanline hover. Momentary, hover-triggered only; not a
+     persistent color change. Narrow, contained extension of the Mark 19
+     accent-restraint rule's "live telemetry indicator" allowance — this log
+     is itself a timestamped operational surface, and the sweep is purely a
+     hover micro-interaction, not decorative background color. */
+  .field-log li::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 1px;
+    background: var(--color-accent);
+    opacity: 0;
+    transition: none;
+  }
+
+  .field-log li:hover::after {
+    animation: field-log-scanline 0.9s ease-in-out;
+  }
+
+  @keyframes field-log-scanline {
+    0% {
+      left: -100%;
+      opacity: 0.9;
+    }
+    100% {
+      left: 100%;
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .field-log li {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+  }
+
+  .field-log-date {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  .field-log-note-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .field-log-note {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    line-height: 1.5;
+  }
+
+  .field-log-relative {
+    font-size: 0.7rem;
+    color: var(--color-text-faint);
+    white-space: nowrap;
+  }
+
+  .field-log-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .field-log-tag {
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border-strong);
+    padding: 2px 6px;
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .field-log li::after {
+      display: none;
+    }
+
+    .field-boot-overlay {
+      transition: none;
+    }
+  }
+
+  /* Mark 24 — terminal boot overlay. Rendered `hidden` server-side, so a
+     no-JS visitor (or one who navigates before the script runs) never sees
+     it; only unhidden by the script below, and only when motion is not
+     reduced. Kept monochrome (not Signal Green) — a one-time loading
+     sequence isn't a "live telemetry indicator" under the Mark 19 restraint
+     rule, so it stays on the neutral palette. */
+  .field-boot-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: var(--color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+  }
+
+  /* Author CSS beats the UA stylesheet's [hidden] rule at equal
+     specificity (class vs. attribute selector), so the unconditional
+     `display: flex` above would otherwise keep this interactive/visible
+     even with the `hidden` attribute set. Restore the hidden behavior
+     explicitly. */
+  .field-boot-overlay[hidden] {
+    display: none;
+  }
+
+  .field-boot-overlay.is-fading {
+    opacity: 0;
+  }
+
+  .field-boot-lines {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--color-text);
+    white-space: pre-wrap;
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  /* Mark 25 — animation fatigue guard: a subtle, brutalist skip control.
+     Bottom-corner placement so it never competes with the boot lines for
+     attention on a first-time visit, but is easy to find on a repeat one. */
+  .field-boot-skip {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    background: transparent;
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  .field-boot-skip:hover,
+  .field-boot-skip:focus-visible {
+    color: var(--color-text);
+    border-color: var(--color-text);
+  }
+</style>
+
+<script>
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const VISITED_KEY = "field-visited";
+
+  // --- 1. Terminal boot sequence -------------------------------------
+  // Overlay is rendered `hidden` in the template; only unhidden here, and
+  // only when motion isn't reduced, so a no-JS or reduced-motion visitor
+  // never sees a "stuck" overlay.
+  //
+  // Mark 25 — animation fatigue guard: a repeat visitor (localStorage flag
+  // already set) gets a 0.2s flash instead of the full ~2s sequence. Either
+  // way, a SKIP button and the Escape key resolve the overlay immediately.
+  function runBootSequence() {
+    const overlayEl = document.getElementById("field-boot-overlay");
+    const linesEl = document.getElementById("field-boot-lines");
+    const skipEl = document.getElementById("field-boot-skip");
+    if (!overlayEl || !linesEl || reducedMotion) return;
+    const overlay: HTMLElement = overlayEl;
+    const lines_el: HTMLElement = linesEl;
+
+    let hasVisited = false;
+    try {
+      hasVisited = localStorage.getItem(VISITED_KEY) === "1";
+      localStorage.setItem(VISITED_KEY, "1");
+    } catch {
+      // Storage unavailable (private browsing, disabled) — fall back to
+      // treating every visit as first-time. Not worth failing the page over.
+    }
+
+    overlay.hidden = false;
+    let pendingTimeout: ReturnType<typeof setTimeout> | null = null;
+    let finished = false;
+
+    function finishBoot() {
+      if (finished) return;
+      finished = true;
+      if (pendingTimeout) clearTimeout(pendingTimeout);
+      overlay.classList.add("is-fading");
+      setTimeout(() => {
+        overlay.hidden = true;
+      }, 200);
+    }
+
+    skipEl?.addEventListener("click", finishBoot);
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        if (event.key === "Escape") finishBoot();
+      },
+      { once: true },
+    );
+
+    if (hasVisited) {
+      // Abbreviated flash: show the final boot state briefly, no line-by-
+      // line typing.
+      lines_el.textContent = "> INITIALIZING...\n> AUTHENTICATED\n> RENDERING";
+      pendingTimeout = setTimeout(finishBoot, 200);
+      return;
+    }
+
+    const lines = ["> INITIALIZING...", "> AUTHENTICATED", "> RENDERING"];
+    let shown = "";
+    let i = 0;
+
+    function nextLine() {
+      if (finished) return;
+      if (i >= lines.length) {
+        finishBoot();
+        return;
+      }
+      shown += (shown ? "\n" : "") + lines[i];
+      lines_el.textContent = shown;
+      i += 1;
+      pendingTimeout = setTimeout(nextLine, 650);
+    }
+
+    nextLine();
+  }
+
+  // --- 2. Typewriter reveal for entry notes ---------------------------
+  // The full note text is already server-rendered (real content, always
+  // present for no-JS/AT). This only visually re-types it; it does not
+  // delay or hide content from anyone who isn't watching the animation
+  // play out.
+  //
+  // Mark 25 — clicking anywhere in the log container instantly completes
+  // every in-progress typewriter instead of making the visitor wait.
+  const activeTypewriters = new Map<HTMLElement, { full: string; intervalId: number }>();
+
+  function completeAllTypewriters() {
+    activeTypewriters.forEach(({ full, intervalId }, el) => {
+      clearInterval(intervalId);
+      el.textContent = full;
+    });
+    activeTypewriters.clear();
+  }
+
+  function runTypewriter() {
+    if (reducedMotion) return;
+    const notes = document.querySelectorAll<HTMLElement>("[data-typewriter]");
+    notes.forEach((el, index) => {
+      const full = el.textContent ?? "";
+      if (!full) return;
+      el.textContent = "";
+      // Fast, length-aware: longer notes type faster per character so no
+      // entry takes more than ~500ms, staggered slightly per row.
+      const perChar = Math.min(14, Math.max(4, 500 / full.length));
+      let pos = 0;
+      const start = () => {
+        const id = window.setInterval(() => {
+          pos += 1;
+          el.textContent = full.slice(0, pos);
+          if (pos >= full.length) {
+            clearInterval(id);
+            activeTypewriters.delete(el);
+          }
+        }, perChar);
+        activeTypewriters.set(el, { full, intervalId: id });
+      };
+      setTimeout(start, index * 60);
+    });
+  }
+
+  document.querySelector(".field-log")?.addEventListener("click", completeAllTypewriters);
+
+  // --- 3. Session-id URL hash ------------------------------------------
+  // Real current date, computed client-side — not a hardcoded example
+  // date that would go stale. Uses replaceState so it doesn't add a
+  // back-button entry or attempt to scroll to a nonexistent anchor.
+  function setSessionHash() {
+    const today = new Date().toISOString().slice(0, 10);
+    history.replaceState(null, "", `#session-${today}`);
+  }
+
+  // --- 4. Live relative timestamps -------------------------------------
+  function relativeFrom(iso: string): string {
+    const diffMs = Date.now() - new Date(iso).getTime();
+    const minutes = Math.floor(diffMs / 60000);
+    if (minutes < 1) return "just now";
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
+  }
+
+  function tickRelativeTimes() {
+    document.querySelectorAll<HTMLElement>(".field-log-relative[data-iso]").forEach((el) => {
+      const iso = el.dataset.iso;
+      if (!iso) return;
+      el.textContent = `· ${relativeFrom(iso)}`;
+    });
+  }
+
+  runBootSequence();
+  runTypewriter();
+  setSessionHash();
+  tickRelativeTimes();
+  setInterval(tickRelativeTimes, 60_000);
+</script>

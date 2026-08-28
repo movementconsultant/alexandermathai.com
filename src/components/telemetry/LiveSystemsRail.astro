@@ -1,0 +1,138 @@
+---
+/**
+ * The Live Systems / Proof of Work rail. Renders up to 4 recent public
+ * PushEvent entries (repo, truncated commit message, date) or a static
+ * fallback link to the GitHub profile when the build-time fetch/parse
+ * fails or returns nothing safe to show. Never a diff, commit body, or PR
+ * description — see src/lib/liveSystems.ts.
+ */
+import { getLiveSystemsItems } from "../../lib/liveSystems";
+import TelemetryDisclosure from "./TelemetryDisclosure.astro";
+
+const result = await getLiveSystemsItems();
+const PROFILE_URL = "https://github.com/movementconsultant";
+---
+
+<div class="live-systems-rail">
+  {
+    result.status === "ok" ? (
+      <>
+        <p class="live-systems-live">
+          <span class="live-systems-live-dot" aria-hidden="true"></span>
+          Live telemetry
+        </p>
+        <ul class="live-systems-list">
+          {result.items.map((item) => (
+            <li>
+              <span class="live-systems-repo">{item.repo}</span>
+              <a
+                href={item.commitUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="live-systems-message"
+              >
+                {item.message}
+              </a>
+              {item.occurredAt && (
+                <time class="live-systems-date" datetime={item.occurredAt}>
+                  {new Date(item.occurredAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </time>
+              )}
+            </li>
+          ))}
+        </ul>
+        <TelemetryDisclosure sourceLabel="GitHub" />
+      </>
+    ) : (
+      <div class="live-systems-fallback">
+        <p class="signal-lost-line">
+          <span aria-hidden="true">&gt;</span> SIGNAL LOST // AWAITING RECONNECTION // ROUTING TO
+          SOURCE
+        </p>
+        <p class="signal-lost-description">
+          The Operational Commit Log isn't available for this build. See the activity directly:
+        </p>
+        <a href={PROFILE_URL} target="_blank" rel="noopener noreferrer" class="text-link">
+          movementconsultant on GitHub &rarr;
+        </a>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .live-systems-live {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-block-end: var(--space-2);
+  }
+
+  .live-systems-live-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--color-positive);
+    flex-shrink: 0;
+  }
+
+  .live-systems-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    font-family: ui-monospace, monospace;
+    font-size: 0.92rem;
+  }
+
+  .live-systems-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2);
+    padding-block: var(--space-2);
+    border-block-end: 1px solid var(--color-border-strong);
+  }
+
+  .live-systems-repo {
+    color: var(--color-text-faint);
+  }
+
+  .live-systems-date {
+    font-size: 0.85rem;
+    color: var(--color-text-faint);
+    white-space: nowrap;
+    margin-inline-start: auto;
+  }
+
+  /* Mark 25 — "Signal Lost" terminal state. See LedgerRail.astro for the
+     same treatment and its rationale. */
+  .live-systems-fallback {
+    padding: var(--space-3);
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-bg-raised);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .signal-lost-line {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+    color: var(--color-accent);
+  }
+
+  .signal-lost-description {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+  }
+</style>

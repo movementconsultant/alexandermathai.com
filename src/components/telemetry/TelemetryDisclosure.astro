@@ -1,0 +1,26 @@
+---
+/**
+ * Shared, restrained disclosure line for every telemetry rail. Per the
+ * Mark 13/14 governance decision, individual items inside a telemetry
+ * stream are exempt from per-item G-M8 review — this line is the honest,
+ * visible trade-off disclosure that makes that exemption legible to a
+ * visitor rather than silent.
+ */
+interface Props {
+  sourceLabel: string;
+}
+const { sourceLabel } = Astro.props;
+---
+
+<p class="telemetry-disclosure">
+  Automatically retrieved from {sourceLabel} at build time — not individually reviewed. See the source
+  directly for full context.
+</p>
+
+<style>
+  .telemetry-disclosure {
+    font-size: 0.8rem;
+    color: var(--color-text-faint);
+    margin-block-start: var(--space-2);
+  }
+</style>

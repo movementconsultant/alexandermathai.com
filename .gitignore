@@ -22,3 +22,25 @@ npm-debug.log*
 # playwright
 test-results/
 playwright-report/
+# E2E test artifacts (local/CI output only — see docs/site-operations.md
+# "E2E regression tests")
+test-results/
+playwright-report/
+
+# dependencies
+node_modules/
+
+# environment
+.env
+.env.*
+!.env.example
+.dev.vars
+
+# Cloudflare Worker local dev state (workers/contact-intake)
+.wrangler/
+
+# editor / OS
+.DS_Store
+*.log
+.vscode/*
+!.vscode/extensions.json

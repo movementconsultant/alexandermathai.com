@@ -1,0 +1,268 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Button from "../components/ui/Button.astro";
+import { founderSocialLinks, tmiUrl, tmiUrlVerified } from "../data/social";
+
+const verifiedFounderSocialLinks = founderSocialLinks.filter((l) => l.verified);
+import { site } from "../data/site";
+
+const timeline = [
+  {
+    range: "2006–2012",
+    label: "Engineering education",
+    body: "Civil engineering training — the first-principles, load-path orientation that still shapes how systems get diagnosed and built.",
+  },
+  {
+    range: "2012–2013",
+    label: "Civil engineering / infrastructure experience",
+    body: "Applied engineering work in infrastructure, before the shift toward performance, business, and systems work.",
+  },
+  {
+    range: "2013–2015",
+    label: "SWEAT operational growth",
+    body: "Built the membership and retention system behind SWEAT Boxing and Training — zero to 140 members in nine months.",
+  },
+  {
+    range: "2015–present",
+    label: "TMI formation and evolution",
+    body: "Founded Texas Movement International; has served as Founder & President since.",
+  },
+  {
+    range: "2018–present",
+    label: "Texas Movement Media",
+    body: "Built the independent long-form storytelling and distribution system now at 2.1M+ cumulative views.",
+  },
+  {
+    range: "2023–present",
+    label: "HERO leadership",
+    body: "Leading product, brand, and commerce infrastructure for HERO Footwear & Performance.",
+  },
+  {
+    range: "2023–present",
+    label: "AI systems translation",
+    body: "Applying AI directly inside operating systems for consulting clients and TMI's own ecosystem.",
+  },
+];
+
+const principles = [
+  "Diagnose the actual constraint before proposing a fix.",
+  "Build the smallest system that solves the real problem — not the most impressive one.",
+  "Own what's core; rent what's replaceable.",
+  "Document decisions so systems survive a handoff.",
+  "Say what's verified plainly, and what isn't yet, honestly.",
+];
+
+const evidence = [
+  "Founder & President, Texas Movement International — since 2015",
+  "Civil engineering education, first-principles systems orientation",
+  "Texas Movement Media: 2.1M+ views across platforms",
+  "Consulting practice: 150+ clients historically, including professional athletes and Fortune 500 executives",
+  "SWEAT Boxing and Training: zero to 140 members in nine months, 85+ retained beyond three months",
+  "HERO Footwear: three product generations, 35+ products",
+];
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://alexandermathai.com/" },
+    { "@type": "ListItem", position: 2, name: "About", item: "https://alexandermathai.com/about" },
+  ],
+};
+
+const profilePageLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  mainEntity: { "@type": "Person", name: "Alexander Mathai" },
+};
+---
+
+<BaseLayout
+  title="About — Alexander Mathai"
+  description="Alexander Mathai is an engineering-trained founder-operator and the Founder & President of Texas Movement International, working across consulting, media, product, and performance."
+  structuredData={[breadcrumbLd, profilePageLd]}
+>
+  <section class="section section--tight">
+    <div class="wrap prose">
+      <p class="eyebrow">About</p>
+      <h1>Alexander Mathai</h1>
+      <p class="lede">
+        Founder-operator and systems builder. Founder &amp; President of Texas Movement
+        International since 2015, working across consulting, media, product, and performance — with
+        an engineering-trained, first-principles approach to all of it.
+      </p>
+      <p class="label-mono">{site.region}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap prose">
+      <h2>Background</h2>
+      <p>
+        Alexander's path started in civil engineering — training in load, structure, and dependency
+        that turned out to transfer directly to businesses and brands. From there, the work moved
+        through elite performance and operations (SWEAT), into founding and running Texas Movement
+        International, building an independent media practice, leading product and commerce work at
+        HERO, and — more recently — applying AI directly inside the operating systems his consulting
+        clients run on.
+      </p>
+      <p>
+        The throughline is the same diagnostic habit in every domain: find the actual constraint,
+        not the assumed one, and build the smallest system that resolves it.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Timeline">
+    <div class="wrap">
+      <h2>Timeline</h2>
+      <ol class="timeline">
+        {
+          timeline.map((item) => (
+            <li class="timeline__item">
+              <p class="label-mono timeline__range">{item.range}</p>
+              <div>
+                <h3>{item.label}</h3>
+                <p>{item.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap prose">
+      <h2>Principles / way of working</h2>
+      <ul class="principles-list">
+        {principles.map((p) => <li>{p}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Select credentials and evidence</h2>
+      <ul class="evidence-list">
+        {evidence.map((e) => <li class="card">{e}</li>)}
+      </ul>
+      <p class="label-mono evidence-note">Selected proof, not a complete résumé.</p>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap prose">
+      <h2>Alexander and TMI</h2>
+      <p>
+        Alexander is the founder and individual point of view behind Texas Movement International.
+        This site is his — the umbrella organization,{" "}
+        {
+          tmiUrlVerified ? (
+            <a href={tmiUrl} class="text-link" target="_blank" rel="noopener noreferrer">
+              Texas Movement International
+            </a>
+          ) : (
+            "Texas Movement International"
+          )
+        }
+        , is where the divisions he's built live and operate at their own pace.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap about-connect">
+      {
+        verifiedFounderSocialLinks.length > 0 && (
+          <div>
+            <h2>Where to connect</h2>
+            <ul class="cluster about-connect__links">
+              {verifiedFounderSocialLinks.map((link) => (
+                <li>
+                  <a href={link.url} class="text-link" target="_blank" rel="noopener noreferrer">
+                    {link.platform}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+      <Button href="/contact" variant="primary">Discuss a system</Button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    border-left: var(--border-hairline);
+    padding-inline-start: var(--space-3);
+  }
+
+  .timeline__item {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: var(--space-2);
+  }
+
+  @media (max-width: 40rem) {
+    .timeline__item {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .timeline__item h3 {
+    font-size: 1.05rem;
+    margin-block-end: 0.3rem;
+  }
+
+  .timeline__item p:not(.timeline__range) {
+    color: var(--color-text-muted);
+  }
+
+  .principles-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    max-width: var(--measure);
+  }
+
+  .principles-list li {
+    padding-inline-start: 1.4rem;
+    position: relative;
+    color: var(--color-text-muted);
+  }
+
+  .principles-list li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--color-text);
+  }
+
+  .evidence-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-2);
+  }
+
+  .evidence-note {
+    margin-block-start: var(--space-3);
+  }
+
+  .about-connect {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .about-connect__links {
+    margin-block-start: var(--space-2);
+  }
+</style>

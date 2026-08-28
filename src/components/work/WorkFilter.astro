@@ -1,0 +1,88 @@
+---
+const categories: { value: string; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "ai-systems", label: "AI Systems" },
+  { value: "brand-architecture", label: "Brand Architecture" },
+  { value: "web-infrastructure", label: "Web Infrastructure" },
+  { value: "media", label: "Media" },
+  { value: "commerce", label: "Commerce" },
+  { value: "performance", label: "Performance" },
+  { value: "operations", label: "Operations" },
+];
+---
+
+<div class="work-filter" role="group" aria-label="Filter work by category">
+  {
+    categories.map((cat, i) => (
+      <button
+        type="button"
+        class="work-filter__btn"
+        data-category={cat.value}
+        aria-pressed={i === 0 ? "true" : "false"}
+      >
+        {cat.label}
+      </button>
+    ))
+  }
+</div>
+
+<style>
+  .work-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-block: var(--space-3) var(--space-4);
+  }
+
+  .work-filter__btn {
+    border: 1px solid var(--color-border-strong);
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    min-height: 44px;
+  }
+
+  .work-filter__btn:hover {
+    color: var(--color-text);
+    border-color: var(--color-text);
+  }
+
+  .work-filter__btn[aria-pressed="true"] {
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-color: var(--color-text);
+  }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".work-filter__btn");
+  const cards = document.querySelectorAll<HTMLElement>("[data-work-category]");
+  const emptyState = document.getElementById("work-empty-state");
+
+  function applyFilter(category: string) {
+    let visibleCount = 0;
+    cards.forEach((card) => {
+      const cardCategories = (card.dataset.workCategory ?? "").split(",");
+      const show = category === "all" || cardCategories.includes(category);
+      card.hidden = !show;
+      if (show) visibleCount += 1;
+    });
+    if (emptyState) emptyState.hidden = visibleCount !== 0;
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      buttons.forEach((b) => b.setAttribute("aria-pressed", "false"));
+      btn.setAttribute("aria-pressed", "true");
+      applyFilter(btn.dataset.category ?? "all");
+    });
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  const initial = params.get("category");
+  if (initial) {
+    const match = Array.from(buttons).find((b) => b.dataset.category === initial);
+    if (match) match.click();
+  }
+</script>

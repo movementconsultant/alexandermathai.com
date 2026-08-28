@@ -1,0 +1,8 @@
+# Cloudflare Pages _redirects syntax.
+#
+# Apex domain (alexandermathai.com) is canonical. www.alexandermathai.com redirects
+# permanently here. This rule only takes effect once www.alexandermathai.com is also
+# added as a custom domain on the same Cloudflare Pages project — until then it has no
+# effect and causes no harm. See docs/mark-2-launch-plan.md "Production DNS / deployment
+# steps".
+https://www.alexandermathai.com/* https://alexandermathai.com/:splat 301!

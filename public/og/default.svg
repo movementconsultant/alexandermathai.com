@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0H0V60" fill="none" stroke="#22252a" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#0b0c0d"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <line x1="0" y1="0" x2="1200" y2="630" stroke="#2c2f33" stroke-width="1"/>
+  <path d="M80 500 L360 500 L520 260 L760 260 L900 130" fill="none" stroke="#ff5a1f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="80" cy="500" r="6" fill="#ff5a1f"/>
+  <circle cx="360" cy="500" r="6" fill="#ff5a1f"/>
+  <circle cx="520" cy="260" r="6" fill="#ff5a1f"/>
+  <circle cx="760" cy="260" r="6" fill="#ff5a1f"/>
+  <circle cx="900" cy="130" r="6" fill="#ff5a1f"/>
+  <text x="80" y="200" font-family="Georgia, 'Times New Roman', serif" font-size="64" fill="#eeece6" font-weight="600">Alexander Mathai</text>
+  <text x="80" y="250" font-family="Georgia, 'Times New Roman', serif" font-size="30" fill="#a6a9ad">Build the system behind the ambition.</text>
+  <text x="80" y="580" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="20" letter-spacing="2" fill="#75797e">FOUNDER-OPERATOR · TEXAS MOVEMENT INTERNATIONAL</text>
+</svg>

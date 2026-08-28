@@ -1,0 +1,163 @@
+/**
+ * Design tokens — "Industrial Brutalism" (Mark 19).
+ * Dark-first, with an equal-quality light theme. Respects
+ * prefers-color-scheme and a persistent [data-theme] override (see
+ * src/components/ui/ThemeToggle.astro and the inline anti-flash script in
+ * BaseLayout.astro).
+ *
+ * Mark 19 note: this token set now shares its literal palette with
+ * texasmovement.com's own tokens (Void Black / Panel Grey / Signal Green) —
+ * a deliberate, explicit reversal of the Mark 13 decision (recorded in prior
+ * history) to keep AVM's accent hue distinct from TMI's so the two
+ * properties would never look like the same brand. That reasoning is
+ * superseded here by direct owner instruction to apply one shared visual
+ * skin across both properties. AVM keeps its own domain, routes, content,
+ * and editorial voice — only the color/typography/shape system is now
+ * shared. --color-accent (Signal Green) is restricted to exactly two
+ * surfaces per the Mark 19 UX guardrails: the primary Contact Intake button
+ * and live-telemetry status indicators (LedgerRail / LiveSystemsRail
+ * "active" state) — it does not appear on links, hovers, eyebrows, or
+ * decorative borders. See global.css and the telemetry components for the
+ * enforcement of that restraint.
+ */
+
+:root {
+  /* ---- Color: dark (default) ---- */
+  --color-bg: #050505;
+  --color-bg-raised: #0e0e0e;
+  --color-surface: #0e0e0e;
+  --color-graphite: #0a0a0a;
+  --color-border: #222222;
+  --color-border-strong: #222222;
+  --color-text: #ffffff;
+  --color-text-muted: #888888;
+  --color-text-faint: #888888;
+  --color-accent: #00ff94; /* Signal Green — reserved: Contact Intake button + live telemetry indicators only */
+  --color-accent-text: #04120a;
+  --color-focus: #ffffff;
+  --color-positive: #00ff94;
+  --color-caution: #e8b64a;
+
+  color-scheme: dark;
+
+  /* ---- Type ----
+     Headings/metadata: monospace, uppercase, tracked out (Mark 19). No new
+     font dependency is introduced — this site loads no Google Fonts, so
+     --font-display now reuses the existing system-monospace stack instead
+     of requesting "Space Mono"/"IBM Plex Mono" as a remote font. Body copy
+     (--font-sans, Inter/system-sans) is unchanged — already satisfies the
+     brief. */
+  --font-display: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", monospace;
+  --font-sans:
+    "InterVariable", Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", monospace;
+
+  /* ---- Scale ---- */
+  --measure: 38rem;
+  --measure-wide: 68rem;
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.25rem;
+  --space-5: 3.5rem;
+  --space-6: 5.5rem;
+  --space-7: 8rem;
+
+  /* Brutalist rule (Mark 19): border-radius 0 everywhere. Kept as tokens
+     (rather than deleted) since ~10 components reference var(--radius-sm)/
+     var(--radius-md) directly — zeroing here zeroes every one of them
+     without touching each call site. Hardcoded radii (999px pills, 50%
+     dots) are removed individually at their own selectors. */
+  --radius-sm: 0;
+  --radius-md: 0;
+
+  --border-hairline: 1px solid var(--color-border);
+
+  --ease-signal: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* ---- Future-Firm Operating Console shared semantic layer ----
+     Cross-property vocabulary shared with texasmovement.com's own --ff-*
+     tokens (see that repo's src/styles/global.css). Defined once here as
+     aliases onto the tokens above, so every value — including the light-
+     theme overrides below and the [data-theme] toggle overrides in this
+     same file — is inherited automatically; nothing below needs its own
+     media-query or [data-theme] copy. */
+  --ff-bg-base: var(--color-bg);
+  --ff-bg-panel: var(--color-bg-raised);
+  --ff-bg-panel-subtle: var(--color-surface);
+  --ff-text-primary: var(--color-text);
+  --ff-text-secondary: var(--color-text-muted);
+  --ff-text-muted: var(--color-text-faint);
+  --ff-border-structural: var(--color-border);
+  --ff-border-emphasis: var(--color-border-strong);
+  --ff-accent-signal: var(--color-accent);
+  --ff-accent-signal-muted: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  --ff-focus-ring: var(--color-focus);
+  --ff-font-ui: var(--font-sans);
+  --ff-font-mono: var(--font-mono);
+}
+
+/* System preference, when no explicit toggle choice has been made */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --color-bg: #ffffff;
+    --color-bg-raised: #f0f0f0;
+    --color-surface: #f0f0f0;
+    --color-graphite: #f7f7f7;
+    --color-border: #222222;
+    --color-border-strong: #222222;
+    --color-text: #050505;
+    --color-text-muted: #555555;
+    --color-text-faint: #555555;
+    --color-accent: #00ff94;
+    --color-accent-text: #04120a;
+    --color-focus: #050505;
+    --color-positive: #007a46; /* darkened from the shared #00ff94 — that reaches only 1.33:1 as on-white text; this reaches 5.42:1 against --color-bg and 4.76:1 against --color-bg-raised. See docs/mark-2-release-audit.md for the same WCAG-contrast discipline. */
+    --color-caution: #8a6415;
+    color-scheme: light;
+  }
+}
+
+/* Explicit user toggle wins in both directions */
+:root[data-theme="light"] {
+  --color-bg: #ffffff;
+  --color-bg-raised: #f0f0f0;
+  --color-surface: #f0f0f0;
+  --color-graphite: #f7f7f7;
+  --color-border: #222222;
+  --color-border-strong: #222222;
+  --color-text: #050505;
+  --color-text-muted: #555555;
+  --color-text-faint: #555555;
+  --color-accent: #00ff94;
+  --color-accent-text: #04120a;
+  --color-focus: #050505;
+  --color-positive: #007a46; /* darkened from the shared #00ff94 — that reaches only 1.33:1 as on-white text; this reaches 5.42:1 against --color-bg and 4.76:1 against --color-bg-raised. See docs/mark-2-release-audit.md for the same WCAG-contrast discipline. */
+  --color-caution: #8a6415;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --color-bg: #050505;
+  --color-bg-raised: #0e0e0e;
+  --color-surface: #0e0e0e;
+  --color-graphite: #0a0a0a;
+  --color-border: #222222;
+  --color-border-strong: #222222;
+  --color-text: #ffffff;
+  --color-text-muted: #888888;
+  --color-text-faint: #888888;
+  --color-accent: #00ff94;
+  --color-accent-text: #04120a;
+  --color-focus: #ffffff;
+  --color-positive: #00ff94;
+  --color-caution: #e8b64a;
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ease-signal: linear;
+  }
+}

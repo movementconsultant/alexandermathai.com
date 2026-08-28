@@ -1,0 +1,38 @@
+---
+import Button from "../ui/Button.astro";
+---
+
+<section class="section section--tight closing-cta">
+  <div class="wrap closing-cta__inner">
+    <h2>If the system matters, build it to last.</h2>
+    <p class="lede">
+      For founders, teams, and organizations navigating a rebuild, launch, operating constraint, or
+      high-stakes digital decision.
+    </p>
+    <div class="cluster">
+      <Button href="/contact" variant="primary">Discuss a system</Button>
+      <Button href="/ecosystem#texas-movement-consulting" variant="secondary"
+        >View consulting</Button
+      >
+    </div>
+  </div>
+</section>
+
+<style>
+  .closing-cta {
+    border-bottom: none;
+  }
+
+  .closing-cta__inner {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .closing-cta__inner .cluster {
+    justify-content: center;
+    margin-block-start: var(--space-2);
+  }
+</style>
