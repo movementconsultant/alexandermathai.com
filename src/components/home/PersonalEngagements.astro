@@ -1,0 +1,96 @@
+---
+// src/components/home/PersonalEngagements.astro
+//
+// Mark 30 — owner-authorized "Personal Engagements" section: three rate
+// tiers for direct, personal work with Alexander (coaching, speaking,
+// advisory), distinct from the Texas Movement Consulting practice tiers on
+// /consulting. Exact copy given verbatim by the owner. Every tier routes to
+// the same real /contact page; no booking flow, calendar, or checkout
+// exists here — engagements are scoped via brief, per the disclosure line
+// below.
+const tiers = [
+  {
+    name: "One-on-One Coaching",
+    rate: "$500–$1,000/hour · 3-session minimum",
+    body: "Direct systems and decision support for founders and operators. Scoped around specific constraints and outcomes.",
+  },
+  {
+    name: "Keynote Speaking",
+    rate: "$5,000–$15,000 per engagement",
+    body: "Live systems thinking for conferences, offsites, and serious rooms. Topics: AI and operations, economic leverage, multi-lane company design.",
+  },
+  {
+    name: "Advisory & Creative",
+    rate: "Project-based · starting at $2,500",
+    body: "Strategic advisory, content collaboration, and IP licensing for aligned operators and brands.",
+  },
+];
+---
+
+<section class="section personal-engagements">
+  <div class="wrap">
+    <p class="eyebrow">Personal Engagements</p>
+    <h2>Work with Alexander directly.</h2>
+    <ul class="personal-engagements__grid">
+      {
+        tiers.map((tier) => (
+          <li class="personal-engagements__card">
+            <h3>{tier.name}</h3>
+            <p class="personal-engagements__rate">{tier.rate}</p>
+            <p class="personal-engagements__body">{tier.body}</p>
+            <a href="/contact" class="text-link">
+              Request Brief &rarr;
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="personal-engagements__disclosure">
+      All engagements scoped via brief. Rates reflect 2026 availability.
+    </p>
+  </div>
+</section>
+
+<style>
+  .personal-engagements__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+    margin-block-start: var(--space-4);
+  }
+
+  @media (max-width: 56rem) {
+    .personal-engagements__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .personal-engagements__card {
+    border: var(--border-hairline);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .personal-engagements__rate {
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    letter-spacing: 0.02em;
+    color: var(--color-text);
+  }
+
+  .personal-engagements__body {
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+    margin-block-end: 0.4rem;
+  }
+
+  .personal-engagements__disclosure {
+    margin-block-start: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-text-faint);
+  }
+</style>
