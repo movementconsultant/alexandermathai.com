@@ -21,6 +21,7 @@ export const ROUTES = [
   "/artifacts",
   "/artifacts/systems-over-tactics",
   "/about",
+  "/consulting",
   "/contact",
   "/privacy",
   "/404",

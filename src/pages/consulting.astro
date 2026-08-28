@@ -1,0 +1,222 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PurchaseButton from "../components/ui/PurchaseButton.astro";
+import { CONSULTING_TIERS } from "../data/consultingTiers";
+
+// Mark 29 — Texas Movement Consulting's expanded copy and real Stripe
+// Checkout purchase functionality, mirrored from texasmovement.com's own
+// /consulting page. Per the owner's explicit Mark 29 decision, this is the
+// SAME practice with the SAME pricing tiers and the SAME shared Stripe
+// checkout Worker as that site — not a separate AVM-branded commercial
+// offering (see src/data/consultingTiers.ts and
+// src/components/ui/PurchaseButton.astro). This is consistent with, not a
+// change to, this repo's own existing description of the practice (see
+// src/content/ecosystem/texas-movement-consulting.md: "TMI's primary
+// consulting practice — Alexander Mathai's direct advisory work").
+//
+// Known, disclosed gap: this page is not yet linked from the primary nav
+// or /ecosystem's own routing (which still points at /contact) — adding
+// that wiring was judged out of this Mark's scope (copy + commerce, not
+// information architecture) and left as a follow-up.
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://alexandermathai.com/" },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Consulting",
+      item: "https://alexandermathai.com/consulting",
+    },
+  ],
+};
+
+const whatYouGet = [
+  "30-day diagnostic with prioritized systems roadmap",
+  "Documented decision record that survives team changes",
+  "AI workflow implementation with your team co-owning the build",
+  "Ongoing operator support for founders who need systems stewardship",
+];
+---
+
+<BaseLayout
+  title="Consulting — Alexander Mathai"
+  description="Texas Movement Consulting builds AI-powered operating systems for founders and institutions. Diagnostic intake is open for qualified operators."
+  structuredData={[breadcrumbLd]}
+>
+  <section class="section section--tight">
+    <div class="wrap prose">
+      <p class="eyebrow">Consulting</p>
+      <h1>Texas Movement Consulting.</h1>
+      <p class="lede">
+        AI-powered operating systems for founders and institutions: turning operational and
+        technical expertise into repeatable, documented systems rather than one-off advice.
+        Diagnostic intake is open for qualified operators.
+      </p>
+      <ul class="check-list">
+        {whatYouGet.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="tiers-heading">
+    <div class="wrap">
+      <p class="eyebrow">Engagement tiers</p>
+      <h2 id="tiers-heading">Three ways to work together.</h2>
+
+      <div class="tiers-grid">
+        <article class="tier-card" aria-labelledby="tier-diagnostic-heading">
+          <h3 id="tier-diagnostic-heading">Tier 1 · Diagnostic</h3>
+          <p class="tier-price">{CONSULTING_TIERS[0].priceRange}</p>
+          <p class="tier-summary">
+            A structured, four-week engagement that turns undocumented operational knowledge into
+            a prioritized systems roadmap.
+          </p>
+          <ul class="check-list">
+            <li>Week 1: Stakeholder interviews and current-state mapping</li>
+            <li>Week 2: Friction point identification and owner-dependence audit</li>
+            <li>Week 3: Systems architecture and AI workflow opportunities</li>
+            <li>Week 4: Prioritized roadmap with timelines, owners, and key decisions</li>
+          </ul>
+          <p class="tier-subhead">Deliverables</p>
+          <ul class="check-list">
+            <li>Current-state systems map (visual + written)</li>
+            <li>Friction log with severity ratings</li>
+            <li>Prioritized implementation roadmap</li>
+            <li>Decision record template for ongoing use</li>
+          </ul>
+          <PurchaseButton tierId="diagnostic" tierName="Diagnostic" />
+        </article>
+
+        <article class="tier-card" aria-labelledby="tier-systems-build-heading">
+          <h3 id="tier-systems-build-heading">Tier 2 · Systems Build</h3>
+          <p class="tier-price">{CONSULTING_TIERS[1].priceRange}</p>
+          <p class="tier-summary">
+            Implementation of the roadmap: real systems built, tested, and documented alongside
+            your team, not handed off as a slide deck.
+          </p>
+          <ul class="check-list">
+            <li>2-4 implementation sprints (2 weeks each)</li>
+            <li>AI workflow design and testing with your team</li>
+            <li>Documentation that enables audit and adjustment</li>
+            <li>Handoff training for your internal systems owner</li>
+          </ul>
+          <p class="tier-subhead">Typical Scope</p>
+          <ul class="check-list">
+            <li>Client intake and onboarding automation</li>
+            <li>AI-assisted content production workflows</li>
+            <li>Decision support systems for recurring choices</li>
+            <li>Cross-team coordination and handoff protocols</li>
+          </ul>
+          <PurchaseButton tierId="systems-build" tierName="Systems Build" />
+        </article>
+
+        <article class="tier-card" aria-labelledby="tier-retainer-heading">
+          <h3 id="tier-retainer-heading">Tier 3 · Operator Retainer</h3>
+          <p class="tier-price">{CONSULTING_TIERS[2].priceRange}</p>
+          <p class="tier-summary">
+            Ongoing systems stewardship for operators who need ongoing calibration, not a
+            one-time engagement.
+          </p>
+          <ul class="check-list">
+            <li>Weekly systems check-in (30-60 min)</li>
+            <li>Async decision support via structured briefs</li>
+            <li>Monthly systems audit and adjustment</li>
+            <li>Quarterly strategic review and roadmap update</li>
+          </ul>
+          <p class="tier-subhead">Best For</p>
+          <ul class="check-list">
+            <li>Founders scaling past 10 people who need systems stewardship</li>
+            <li>Operators managing multiple projects with competing priorities</li>
+            <li>Teams implementing AI workflows who need ongoing calibration</li>
+            <li>Companies preparing for funding, acquisition, or leadership transition</li>
+          </ul>
+          <PurchaseButton tierId="retainer" tierName="Operator Retainer" />
+        </article>
+      </div>
+
+      <p class="tiers-footnote">
+        Pricing above reflects each tier's published range; the exact amount for a given
+        engagement is confirmed before checkout. No client name, result, metric, or testimonial
+        appears on this page — a real case study will only be added once one exists and is
+        confirmed for publication.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .check-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-block: var(--space-2);
+    padding: 0;
+  }
+
+  .check-list li {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+    padding-left: 1.1rem;
+    position: relative;
+  }
+
+  .check-list li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--color-text-muted);
+  }
+
+  .tiers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+
+  .tier-card {
+    border: var(--border-hairline);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tier-price {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-top: 0.25rem;
+  }
+
+  .tier-summary {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin-top: var(--space-1);
+  }
+
+  .tier-subhead {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text);
+    margin-top: var(--space-1);
+  }
+
+  .tiers-footnote {
+    color: var(--color-text-faint);
+    font-size: 0.85rem;
+    max-width: var(--measure);
+    margin-top: var(--space-3);
+  }
+</style>

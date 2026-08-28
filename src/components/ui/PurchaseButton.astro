@@ -1,0 +1,202 @@
+---
+// src/components/ui/PurchaseButton.astro
+//
+// Mark 29 — "Purchase [Tier]" CTA for each Consulting pricing tier on this
+// site. Points at the SAME shared Stripe checkout Worker as
+// texasmovement.com/consulting — one Texas Movement Consulting practice,
+// one checkout, per the owner's explicit Mark 29 decision (see
+// src/data/consultingTiers.ts). Real payment functionality: on click,
+// POSTs { tier } to PUBLIC_STRIPE_CHECKOUT_ENDPOINT and redirects to the
+// returned Stripe Checkout Session URL on success. Every failure mode
+// degrades to a working link, never a broken button:
+//   - PUBLIC_STRIPE_CHECKOUT_ENDPOINT unset at build time (the default in
+//     every build this repo runs today) -> renders a plain "Contact to
+//     Purchase" link to /contact instead of a JS-driven button. No fetch
+//     call exists in this state at all.
+//   - Endpoint configured but the request fails -> the button re-enables
+//     and shows an inline status message pointing at the "Questions? Email
+//     first" link below it, rather than hanging or silently failing.
+// A dev-mode console.warn fires when the endpoint is unset, per the
+// owner's explicit "Add console warning in dev mode when Stripe key
+// missing" instruction.
+export interface Props {
+  tierId: "diagnostic" | "systems-build" | "retainer";
+  tierName: string;
+}
+const { tierId, tierName } = Astro.props;
+const checkoutEndpoint = import.meta.env.PUBLIC_STRIPE_CHECKOUT_ENDPOINT ?? "";
+
+if (import.meta.env.DEV && !checkoutEndpoint) {
+  console.warn(
+    `[PurchaseButton] PUBLIC_STRIPE_CHECKOUT_ENDPOINT is not set — "${tierName}" will render as a static "Contact to Purchase" fallback link instead of a live Stripe Checkout button.`,
+  );
+}
+---
+
+{
+  checkoutEndpoint ? (
+    <div class="purchase-cta">
+      <button
+        type="button"
+        class="btn-purchase"
+        data-tier={tierId}
+        data-checkout-endpoint={checkoutEndpoint}
+      >
+        Purchase {tierName}
+      </button>
+      <p class="purchase-status" role="status" aria-live="polite" hidden />
+      <a href="/contact" class="purchase-secondary-link">
+        Questions? Email first →
+      </a>
+    </div>
+  ) : (
+    <div class="purchase-cta">
+      <a href="/contact" class="btn-purchase btn-purchase--fallback">
+        Contact to Purchase
+      </a>
+      <a href="/contact" class="purchase-secondary-link">
+        Questions? Email first →
+      </a>
+    </div>
+  )
+}
+
+<style>
+  .purchase-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: var(--space-2);
+  }
+
+  /* Mark 29 — Signal Green fill on a purchase/payment action, per the
+     owner's explicit spec. Same design tokens as the Mark 19
+     accent-restraint amendment (--color-accent, --color-bg as "Void
+     Black"), scoped to its own class rather than reusing global
+     .btn--primary since this button's hover behavior is a deliberate full
+     color-invert (Void Black bg / Signal Green text), not .btn--primary's
+     transparent-bg hover. */
+  .btn-purchase {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.85em 1.4em;
+    min-height: 44px;
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-sm);
+    background: var(--color-accent);
+    /* --color-accent-text (not --color-bg) deliberately: unlike
+       texasmovement.com, this site has a light/dark theme toggle and
+       --color-bg flips to white in light mode — using it here would leave
+       white-on-green text, failing WCAG AA (confirmed via axe-core during
+       this Mark; --color-accent-text is the theme-invariant "safe on
+       accent" pair already used by .btn--primary for exactly this
+       reason). */
+    color: var(--color-accent-text);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color 0.2s var(--ease-signal),
+      color 0.2s var(--ease-signal);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Hover-invert per spec: a literal Void Black fill, not the theme-
+     reactive --color-bg (which is white in light mode) — the brutalist
+     accent-button pair is meant to look identical regardless of site
+     theme, same as --color-accent/--color-accent-text above and
+     .btn--primary's own hover treatment. */
+  .btn-purchase:hover,
+  .btn-purchase:focus-visible {
+    background: #050505;
+    color: var(--color-accent);
+  }
+
+  .btn-purchase:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .purchase-status {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+  }
+
+  .purchase-secondary-link {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+
+  .purchase-secondary-link:hover {
+    color: var(--color-text);
+    border-bottom-color: var(--color-text);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-purchase {
+      transition: none;
+    }
+  }
+
+  /* Mobile-responsive sizing: full-width, comfortable tap target. */
+  @media (max-width: 40rem) {
+    .btn-purchase,
+    .btn-purchase--fallback {
+      width: 100%;
+      padding: 0.85em 1.2em;
+    }
+  }
+</style>
+
+<script>
+  // No define:vars here deliberately: every button instance reads its own
+  // tier/endpoint off its own data-* attributes, so this script's content
+  // is identical across all three tier instances on the page and Astro
+  // dedupes it to a single copy rather than tripling the listener setup.
+  document.querySelectorAll<HTMLButtonElement>(".btn-purchase[data-tier]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const tier = button.dataset.tier;
+      const endpoint = button.dataset.checkoutEndpoint;
+      if (!tier || !endpoint) return;
+
+      const statusEl = button.parentElement?.querySelector<HTMLElement>(".purchase-status");
+      const setStatus = (message: string) => {
+        if (!statusEl) return;
+        statusEl.hidden = false;
+        statusEl.textContent = message;
+      };
+
+      button.disabled = true;
+      setStatus("Redirecting to secure checkout…");
+
+      try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tier }),
+        });
+        const result = await response.json().catch(() => ({}));
+        if (response.ok && result.url) {
+          window.location.href = result.url;
+          return;
+        }
+        setStatus(
+          result.error || "Checkout is temporarily unavailable — please use the email link below.",
+        );
+      } catch {
+        setStatus("Checkout is temporarily unavailable — please use the email link below.");
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+</script>
