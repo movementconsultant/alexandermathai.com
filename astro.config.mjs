@@ -1,3 +1,9 @@
+import { defineConfig } from "astro/config";
+
+export default defineConfig({
+  site: "https://alexandermathai.com",
+  output: "static",
+  trailingSlash: "never",
 // @ts-check
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";

@@ -1,5 +1,38 @@
 ---
 import "../styles/global.css";
+import SkipLink from "../components/SkipLink.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE, SITE_URL, TMI, IS_PREVIEW, canonicalUrl } from "../config/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  path?: string;
+}
+
+const {
+  title = SITE.title,
+  description = SITE.description,
+  path = "/",
+} = Astro.props;
+
+const pageTitle = title === SITE.title ? title : `${title} — ${SITE.name}`;
+
+// Person schema only. Do not add an Organization node here — the TMI
+// mention below is deliberately limited to a plain name + url, matching
+// the one allowance called out for this repo.
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE.name,
+  url: SITE_URL,
+  affiliation: {
+    "@type": "Organization",
+    name: TMI.name,
+    url: TMI.url,
+  },
+};
 import Header from "../components/site/Header.astro";
 import Footer from "../components/site/Footer.astro";
 import { site, defaultSeo, personSchema } from "../data/site";
@@ -57,6 +90,40 @@ const allStructuredData = [personLd, ...structuredData];
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+
+    {
+      IS_PREVIEW ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <>
+          <meta name="robots" content="index, follow" />
+          <link rel="canonical" href={canonicalUrl(path)} />
+        </>
+      )
+    }
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    {!IS_PREVIEW && <meta property="og:url" content={canonicalUrl(path)} />}
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(personSchema)} />
+  </head>
+  <body>
+    <SkipLink />
+    {IS_PREVIEW && (
+      <div class="preview-banner" role="region" aria-label="Preview status">
+        <p>Preview build — not the live site</p>
+      </div>
+    )}
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />

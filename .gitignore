@@ -2,6 +2,26 @@
 dist/
 .astro/
 
+# dependencies
+node_modules/
+
+# env
+.env
+.env.*
+!.env.example
+
+# logs
+npm-debug.log*
+*.log
+
+# editor/OS
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+
+# playwright
+test-results/
+playwright-report/
 # E2E test artifacts (local/CI output only — see docs/site-operations.md
 # "E2E regression tests")
 test-results/

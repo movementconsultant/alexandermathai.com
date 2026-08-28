@@ -1,5 +1,11 @@
 name = "alexandermathai-com"
 compatibility_date = "2026-08-01"
+pages_build_output_dir = "dist"
+
+# Static Astro build (output: "static") — no adapter required for Cloudflare
+# Pages. This file declares the Pages project shape only; it does not deploy
+# or change anything about the live domain. Preview mode is controlled by the
+# PUBLIC_PREVIEW build-time environment variable — see docs/LAUNCH_BLOCKERS.md.
 
 # Static Astro build output. Point a Cloudflare Pages project at this repo
 # with build command `npm run build` and output directory `dist` — or run

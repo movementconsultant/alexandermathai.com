@@ -2,6 +2,21 @@
 /**
  * Postbuild guard.
  *
+ * Fails the build (non-zero exit) if the built dist/ output contains any of:
+ *  - the literal string "TBD"
+ *  - a `mailto:` link anywhere
+ *  - an HTML <form> element (this build ships no working form of any kind)
+ *  - a link to a known social platform domain (none are confirmed for this
+ *    site — no social URL should ever be emitted)
+ *  - a missing noindex robots meta tag on an HTML page, while the build ran
+ *    in preview mode (PUBLIC_PREVIEW !== "false")
+ *
+ * Run automatically as the `postbuild` npm script.
+ */
+
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import { join, relative } from "node:path";
+
  * ALSO runs a non-blocking claims-registry audit (see runClaimsAudit below)
  * — it can never fail the build, only print a report. See
  * docs/claims-governance.md for why enforcement is intentionally off.
@@ -74,6 +89,7 @@ const isPreview = process.env.PUBLIC_PREVIEW !== "false";
 
 /**
  * Scan a single file's text content for violations. Pure function, exported
+ * for unit testing — see tests/postbuild-guard.test.mjs.
  * for potential unit testing.
  *
  * @param {string} content
@@ -94,6 +110,21 @@ export function scanContent(content, { ext, isPreview: preview, label = "<file>"
   if (content.includes("mailto:")) {
     violations.push(`${label}: contains a "mailto:" link`);
   }
+
+  if (/<form[\s>]/i.test(content)) {
+    violations.push(`${label}: contains a <form> element (no working form should exist)`);
+  }
+
+  for (const domain of SOCIAL_DOMAINS) {
+    if (content.includes(domain)) {
+      violations.push(`${label}: references social domain "${domain}"`);
+    }
+  }
+
+  if (preview && (ext === ".html" || ext === ".htm")) {
+    const hasNoindex = /<meta[^>]+name=["']robots["'][^>]+content=["'][^"']*noindex[^"']*["']/i.test(content);
+    if (!hasNoindex) {
+      violations.push(`${label}: missing <meta name="robots" content="noindex, ..."> in preview mode`);
   if (EMAIL_PATTERN.test(content)) {
     violations.push(`${label}: contains a bare email-address-shaped string`);
   }
@@ -381,6 +412,11 @@ function main() {
     process.exit(1);
   }
 
+  console.log(`postbuild-guard: OK — ${files.length} file(s) scanned, 0 violations. (preview=${isPreview})`);
+}
+
+// Only run when executed directly (`node scripts/postbuild-guard.mjs`), not
+// when imported for `scanContent` (e.g. from unit tests).
   console.log(
     `postbuild-guard: OK — ${scanned} file(s) scanned (of ${files.length} total), 0 violations. (preview=${isPreview})`,
   );
